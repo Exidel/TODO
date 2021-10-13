@@ -14,11 +14,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MainView(mainList: SnapshotStateList<MainClass>) {
+fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, openDescription: (Boolean) -> Unit) {
 
     var tfState by remember { mutableStateOf("") }
     val columnScroll = rememberScrollState(0)
@@ -34,15 +35,19 @@ fun MainView(mainList: SnapshotStateList<MainClass>) {
             ) {
                 if (mainList.size > 0) {
                     for (i in mainList.indices) {
-                        TaskListItems("#${mainList[i].id}" + " " + mainList[i].name)
+                        TaskListItems("#${mainList[i].id}" + " " + mainList[i].name) {
+                            index(i)
+                            openDescription(true)
+                        }
                     }
                 }
             }
 
             VerticalScrollbar(
                 adapter = ScrollbarAdapter(columnScroll),
-                modifier = Modifier.padding(start = 2.dp, top = 13.dp, end = 2.dp, bottom = 83.dp).align(Alignment.TopEnd)
-                    .border(2.dp, Color.DarkGray)
+                modifier = Modifier
+                    .padding(start = 2.dp, top = 13.dp, end = 2.dp, bottom = 83.dp)
+                    .align(Alignment.TopEnd)
             )
         }
 
@@ -57,8 +62,9 @@ fun MainView(mainList: SnapshotStateList<MainClass>) {
                 modifier = Modifier.onKeyEvent {
                     if (it.key == Key.Enter && it.type == KeyEventType.KeyUp) {
                         if (tfState != "") {
-                            mainList.add( MainClass(name = tfState, id = if (mainList.isEmpty()) 1 else mainList.lastIndex+1) )
+                            mainList.add( MainClass(name = tfState, id = mainList.size+1) )
                             tfState = ""
+                            JsonFileOperations().createJsonFromList(mainList)
                         }
                         true
                     } else {false}
@@ -67,7 +73,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>) {
 
             IconButton(onClick = {},
                 modifier = Modifier.size(48.dp, 48.dp).align(Alignment.CenterVertically)
-            ) { Icon(Icons.Rounded.AddCircle, null) }
+            ) { Icon(painter = painterResource("baseline_mic_black_24dp.png"), null) }
 
         }
     }

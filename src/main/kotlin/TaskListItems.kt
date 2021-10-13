@@ -1,5 +1,6 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TaskListItems(text: String) {
+fun TaskListItems(text: String, openDescription: () -> Unit) {
 
     Box(Modifier.padding(2.dp).fillMaxWidth()) {
 
@@ -29,6 +30,7 @@ fun TaskListItems(text: String) {
                 .align(Alignment.CenterStart)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(6.dp))
                 .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(6.dp))
+                .clickable { openDescription.invoke() }
                 .padding(5.dp)
         )
 

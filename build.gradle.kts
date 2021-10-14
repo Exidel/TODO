@@ -30,7 +30,7 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Exe)
             packageName = "TODO"
             packageVersion = "1.0.0"
         }

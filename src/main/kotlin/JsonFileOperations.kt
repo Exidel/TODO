@@ -12,12 +12,14 @@ import kotlin.io.path.Path
 class JsonFileOperations {
 
     fun createJsonFromList(mainList: SnapshotStateList<MainClass>) {
-        val string: String = if (mainList.size > 0) Json.encodeToString(mainList.toList()) else ""
+        val jsFormat = Json { prettyPrint = true }
+        val string: String = if (mainList.size > 0) jsFormat.encodeToString(mainList.toList()) else ""
         val path = Path("data")
         if (Files.notExists(path)) Files.createDirectory(path)
         val file = FileWriter("data\\database.json", Charsets.UTF_8)
         if (string != "") {
             file.write(string)
+            file.flush()
             file.close()
         } else println("fail")
     }

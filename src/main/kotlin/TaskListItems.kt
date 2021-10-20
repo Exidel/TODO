@@ -16,22 +16,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun TaskListItems(text: String, openDescription: () -> Unit) {
+fun TaskListItems(text: String, winSize: () -> Unit) {
 
     Box(Modifier.padding(2.dp).fillMaxWidth()) {
 
         Text(
             text = text,
+            fontSize = 13.sp,
             modifier = Modifier
                 .padding(end = 22.dp)
                 .fillMaxWidth()
                 .align(Alignment.CenterStart)
-                .background(color = Color.LightGray, shape = RoundedCornerShape(6.dp))
-                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(6.dp))
-                .clickable { openDescription.invoke() }
-                .padding(5.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+                .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                .clickable { winSize.invoke() }
+                .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
         )
 
         IconButton( onClick = {
@@ -40,7 +42,7 @@ fun TaskListItems(text: String, openDescription: () -> Unit) {
             modifier = Modifier
                 .size(20.dp, 20.dp)
                 .align(Alignment.CenterEnd)
-        ) { Icon(Icons.Rounded.PlayArrow, null) }
+        ) { Icon(Icons.Rounded.PlayArrow, null, tint = Color.White) }
 
     }
 

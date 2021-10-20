@@ -1,5 +1,6 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -19,15 +20,15 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, openDescription: (Boolean) -> Unit) {
+fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSize: () -> Unit) {
 
     var tfState by remember { mutableStateOf("") }
     val columnScroll = rememberScrollState(0)
 
     Box(Modifier.fillMaxSize()){
-        Box{
+        Box(Modifier.width(330.dp)){
             Column(Modifier
-                .padding(10.dp, 10.dp, 10.dp, 80.dp)
+                .padding(10.dp, 25.dp, 10.dp, 80.dp)
                 .width(300.dp)
                 .fillMaxHeight()
                 .align(Alignment.TopStart)
@@ -37,7 +38,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, openD
                     for (i in mainList.indices) {
                         TaskListItems("#${mainList[i].id}" + " " + mainList[i].name) {
                             index(i)
-                            openDescription(true)
+                            winSize.invoke()
                         }
                     }
                 }
@@ -46,8 +47,16 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, openD
             VerticalScrollbar(
                 adapter = ScrollbarAdapter(columnScroll),
                 modifier = Modifier
-                    .padding(start = 2.dp, top = 13.dp, end = 2.dp, bottom = 83.dp)
-                    .align(Alignment.TopEnd)
+                    .padding(start = 2.dp, top = 28.dp, end = 2.dp, bottom = 83.dp)
+                    .align(Alignment.TopEnd),
+                style = ScrollbarStyle(
+                    minimalHeight = 16.dp,
+                    thickness = 7.dp,
+                    shape = RoundedCornerShape(4.dp),
+                    hoverDurationMillis = 200,
+                    unhoverColor = Color.White,
+                    hoverColor = Color.Gray
+                )
             )
         }
 
@@ -73,7 +82,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, openD
 
             IconButton(onClick = {},
                 modifier = Modifier.size(48.dp, 48.dp).align(Alignment.CenterVertically)
-            ) { Icon(painter = painterResource("baseline_mic_black_24dp.png"), null) }
+            ) { Icon(painter = painterResource("baseline_mic_black_24dp.png"), null, tint = Color.White) }
 
         }
     }

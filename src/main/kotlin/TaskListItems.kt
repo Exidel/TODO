@@ -1,40 +1,48 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun TaskListItems(text: String, winSize: () -> Unit) {
 
+    var dragX by remember { mutableStateOf(0f) }
+
     Box(Modifier.padding(2.dp).fillMaxWidth()) {
 
-        Text(
-            text = text,
-            fontSize = 13.sp,
-            modifier = Modifier
-                .padding(end = 22.dp)
-                .fillMaxWidth()
-                .align(Alignment.CenterStart)
-                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-                .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
-                .clickable { winSize.invoke() }
-                .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
-        )
+        Row(Modifier.padding(start = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+
+            IconButton(onClick = {}, modifier = Modifier.size(19.dp, 19.dp)) {
+                Icon(imageVector = Icons.Rounded.Delete, null, tint = Color.White)
+            }
+
+            IconButton(onClick = {}, modifier = Modifier.size(19.dp, 19.dp)) {
+                Icon(imageVector = Icons.Rounded.Edit, null, tint = Color.White)
+            }
+
+        }
 
         IconButton( onClick = {
             //TODO play recorded file
@@ -43,6 +51,31 @@ fun TaskListItems(text: String, winSize: () -> Unit) {
                 .size(20.dp, 20.dp)
                 .align(Alignment.CenterEnd)
         ) { Icon(Icons.Rounded.PlayArrow, null, tint = Color.White) }
+
+        Box(
+            Modifier
+                .offset { IntOffset(dragX.toInt(), 0) }
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    state = rememberDraggableState { delta -> if (dragX in -10f..70F) dragX += delta },
+                    onDragStopped = { dragX = if (dragX > 0) 60F else 0f }
+                )
+        ) {
+            Text(
+                text = text,
+                fontSize = 13.sp,
+                modifier = Modifier
+                    .padding(end = 22.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart)
+                    .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+                    .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                    .clickable { winSize.invoke() }
+                    .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
+            )
+        }
+
+
 
     }
 

@@ -7,7 +7,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
     val columnScroll = rememberScrollState(0)
 
     Box(Modifier.fillMaxSize()){
+
         Box(Modifier.width(330.dp)){
             Column(Modifier
                 .padding(10.dp, 25.dp, 10.dp, 80.dp)

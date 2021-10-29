@@ -25,17 +25,23 @@ fun main() = application {
     val mainList = JsonFileOperations().parseJsonToObjects()
     val mainWindow = rememberWindowState( size = DpSize(360.dp, 500.dp), position = WindowPosition(Alignment.Center) )
     var index by remember { mutableStateOf(0) }
+    var description by remember { mutableStateOf(false) }
 
     Window(state = mainWindow, onCloseRequest = ::exitApplication, icon = null, undecorated = false) {
 
         Box(Modifier.fillMaxSize().background( Color(80, 80, 80, 255) ) ) {
+
             WindowDraggableArea {
                 Box(Modifier.align(Alignment.TopStart).fillMaxWidth().height(20.dp).background(Color.Gray))
             }
+
              MainView(mainList, {index = it}) {
                 if (mainWindow.size.width == 360.dp) mainWindow.size = mainWindow.size.copy(width = 800.dp)
-                else mainWindow.size = mainWindow.size.copy(width = 360.dp)
+//                else mainWindow.size = mainWindow.size.copy(width = 360.dp)
             }
+
+            DescriptionScreen( mainList, { description = it }, index )
+
         }
 
     }

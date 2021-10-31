@@ -38,10 +38,15 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
             ) {
                 if (mainList.size > 0) {
                     for (i in mainList.indices) {
-                        TaskListItems("#${mainList[i].id}" + " " + mainList[i].name) {
-                            index(i)
-                            winSize.invoke()
-                        }
+                        TaskListElement(
+                            text = "#${mainList.indexOf(mainList[i]) + 1}" + " " + mainList[i].name,
+                            winSize = {
+                                index(i)
+                                winSize.invoke()
+                            },
+                            edit = {  },
+                            delete = { mainList.removeAt(i); JsonFileOperations().createJsonFromList(mainList) }
+                        )
                     }
                 }
             }
@@ -73,7 +78,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
                 modifier = Modifier.onKeyEvent {
                     if (it.key == Key.Enter && it.type == KeyEventType.KeyUp) {
                         if (tfState != "") {
-                            mainList.add( MainClass(name = tfState, id = mainList.size+1) )
+                            mainList.add( MainClass(name = tfState) )
                             tfState = ""
                             JsonFileOperations().createJsonFromList(mainList)
                         }

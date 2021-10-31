@@ -27,7 +27,7 @@ fun main() = application {
     var index by remember { mutableStateOf(0) }
     var description by remember { mutableStateOf(false) }
 
-    Window(state = mainWindow, onCloseRequest = ::exitApplication, icon = null, undecorated = false) {
+    Window(state = mainWindow, onCloseRequest = ::exitApplication, title = "TODO", icon = null, undecorated = false) {
 
         Box(Modifier.fillMaxSize().background( Color(80, 80, 80, 255) ) ) {
 
@@ -36,13 +36,15 @@ fun main() = application {
             }
 
              MainView(mainList, {index = it}) {
-                if (mainWindow.size.width == 360.dp) mainWindow.size = mainWindow.size.copy(width = 800.dp)
-//                else mainWindow.size = mainWindow.size.copy(width = 360.dp)
+                description = true
             }
 
             DescriptionScreen( mainList, { description = it }, index )
 
         }
+
+        if (description) mainWindow.size = mainWindow.size.copy(width = 800.dp)
+        else mainWindow.size = mainWindow.size.copy(width = 360.dp)
 
     }
 

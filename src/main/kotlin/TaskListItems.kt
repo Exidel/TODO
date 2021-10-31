@@ -26,7 +26,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
 @Composable
-fun TaskListItems(text: String, winSize: () -> Unit) {
+fun TaskListElement(
+        text: String,
+        winSize: () -> Unit,
+        edit: () -> Unit,
+        delete: () -> Unit
+) {
 
     var dragX by remember { mutableStateOf(0f) }
 
@@ -34,23 +39,15 @@ fun TaskListItems(text: String, winSize: () -> Unit) {
 
         Row(Modifier.padding(start = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-            IconButton(onClick = {}, modifier = Modifier.size(19.dp, 19.dp)) {
-                Icon(imageVector = Icons.Rounded.Delete, null, tint = Color.White)
-            }
+            IconPreset(Icons.Rounded.Edit) { edit.invoke() }
 
-            IconButton(onClick = {}, modifier = Modifier.size(19.dp, 19.dp)) {
-                Icon(imageVector = Icons.Rounded.Edit, null, tint = Color.White)
-            }
+            IconPreset(Icons.Rounded.Delete) { delete.invoke() }
 
         }
 
-        IconButton( onClick = {
-            //TODO play recorded file
-        },
-            modifier = Modifier
-                .size(20.dp, 20.dp)
-                .align(Alignment.CenterEnd)
-        ) { Icon(Icons.Rounded.PlayArrow, null, tint = Color.White) }
+        Box(Modifier.align(Alignment.CenterEnd)) {
+            IconPreset(Icons.Rounded.PlayArrow) {  }
+        }
 
         Box(
             Modifier

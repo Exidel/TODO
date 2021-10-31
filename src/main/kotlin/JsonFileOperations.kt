@@ -12,7 +12,7 @@ import kotlin.io.path.Path
 class JsonFileOperations {
 
     fun createJsonFromList(mainList: SnapshotStateList<MainClass>) {
-        val jsFormat = Json { prettyPrint = true }
+        val jsFormat = Json { prettyPrint = true; encodeDefaults = true }
         val string: String = if (mainList.size > 0) jsFormat.encodeToString(mainList.toList()) else ""
         val path = Path("data")
         if (Files.notExists(path)) Files.createDirectory(path)

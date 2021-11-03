@@ -76,7 +76,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
                 label = { Text("Enter new task") },
                 keyboardActions = KeyboardActions(),
                 modifier = Modifier.onKeyEvent {
-                    if (it.key == Key.Enter && it.type == KeyEventType.KeyUp) {
+                    if ((it.key == Key.Enter) && (it.type == KeyEventType.KeyUp)) {
                         if (tfState != "") {
                             mainList.add( MainClass(name = tfState) )
                             tfState = ""

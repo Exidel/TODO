@@ -3,9 +3,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MainClass(
-    val name: String = "",
-    val id: Int = 0,
-    val check: Boolean = false,
+    var name: String = "",
+    var check: Boolean = false,
     val innerList: MutableList<MainClass> = mutableListOf()
 ) {
 

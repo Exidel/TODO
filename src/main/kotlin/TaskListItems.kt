@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 
 @Composable
 fun TaskListElement(
@@ -55,7 +56,7 @@ fun TaskListElement(
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta -> if (dragX in -10f..70F) dragX += delta },
-                    onDragStopped = { dragX = if (dragX > 0) 60F else 0f }
+                    onDragStopped = { dragX = if (dragX > 30) 60F else 0f }
                 )
         ) {
             Text(
@@ -67,6 +68,7 @@ fun TaskListElement(
                     .align(Alignment.CenterStart)
                     .background(color = Color.White, shape = RoundedCornerShape(12.dp))
                     .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                    .clip(shape = RoundedCornerShape(12.dp))
                     .clickable { winSize.invoke() }
                     .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
             )

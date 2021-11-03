@@ -27,7 +27,7 @@ fun main() = application {
     var index by remember { mutableStateOf(0) }
     var description by remember { mutableStateOf(false) }
 
-    Window(state = mainWindow, onCloseRequest = ::exitApplication, title = "TODO", icon = null, undecorated = false) {
+    Window(state = mainWindow, onCloseRequest = ::exitApplication, title = "TODO", icon = null, undecorated = false, resizable = false) {
 
         Box(Modifier.fillMaxSize().background( Color(80, 80, 80, 255) ) ) {
 

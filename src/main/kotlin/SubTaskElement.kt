@@ -7,20 +7,18 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -71,22 +69,21 @@ fun SubTaskElement(
                             editTF = false
                         }
                     }
-                    println("test start")
 
                 } else {
 
                     Row(Modifier.padding(start = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                        IconPreset(Icons.Rounded.Add) { addTF = true; editTF = false }
+                        TooltipPreset("Add subtask") { IconPreset(Icons.Rounded.Add) { addTF = true; editTF = false } }
 
-                        IconPreset(Icons.Rounded.Edit) { editTF = true; addTF = false; tfText += item.name }
+                        TooltipPreset("Rename") { IconPreset(Icons.Rounded.Edit) { editTF = true; addTF = false; tfText += item.name } }
 
-                        IconPreset(Icons.Rounded.Delete) { delete.invoke() }
+                        TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { delete.invoke() } }
 
                     }  /** left icons */
 
 
-                    Row(Modifier.padding(end = 20.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
 //                        Box(
 //                            Modifier
@@ -95,7 +92,7 @@ fun SubTaskElement(
 //                                .clickable {  }
 //                        )  /** color picker */
 
-                        IconPreset(Icons.Rounded.Settings) {}
+                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) {} }
 
                         Text(
                             text = "Txt",

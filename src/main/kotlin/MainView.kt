@@ -1,25 +1,14 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.*
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSize: () -> Unit) {
 
@@ -36,10 +25,10 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
                 .align(Alignment.TopStart)
                 .verticalScroll(columnScroll)
             ) {
-                if (mainList.size > 0) {
+                if (mainList.isNotEmpty()) {
                     for (i in mainList.indices) {
                         TaskListElement(
-                            text = "#${mainList.indexOf(mainList[i]) + 1}" + " " + mainList[i].name,
+                            text = "#${i + 1}" + " " + mainList[i].name,
                             winSize = {
                                 index(i)
                                 winSize.invoke()
@@ -67,29 +56,23 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: (Int) -> Unit, winSi
             )
         }
 
-        Row(Modifier.padding(5.dp).align(Alignment.BottomStart).fillMaxWidth()) {
+        Row(Modifier.padding(5.dp).align(Alignment.BottomStart).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 
-            OutlinedTextField(
-                value = tfState,
-                onValueChange = { tfState = it },
-                singleLine = true,
-                label = { Text("Enter new task") },
-                keyboardActions = KeyboardActions(),
-                modifier = Modifier.onKeyEvent {
-                    if ((it.key == Key.Enter) && (it.type == KeyEventType.KeyUp)) {
-                        if (tfState != "") {
-                            mainList.add( MainClass(name = tfState) )
-                            tfState = ""
-                            JsonFileOperations().createJsonFromList(mainList)
-                        }
-                        true
-                    } else {false}
+            MainScreenTF(tfState, {tfState = it}) {
+                if (tfState != "") {
+                    mainList.add( MainClass(tfState) )
+                    tfState = ""
+                    JsonFileOperations().createJsonFromList(mainList)
                 }
-            )
+            }  /** Add TextField */
 
-            IconButton(onClick = {},
-                modifier = Modifier.size(48.dp, 48.dp).align(Alignment.CenterVertically)
-            ) { Icon(painter = painterResource("baseline_mic_black_24dp.png"), null, tint = Color.White) }
+            AddIcon {
+                if (tfState != "") {
+                    mainList.add( MainClass(tfState) )
+                    tfState = ""
+                    JsonFileOperations().createJsonFromList(mainList)
+                }
+            }  /** Add Icon */
 
         }
     }

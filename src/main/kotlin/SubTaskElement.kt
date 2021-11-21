@@ -76,12 +76,11 @@ fun SubTaskElement(
 
                         TooltipPreset("Add subtask") { IconPreset(Icons.Rounded.Add) { addTF = true; editTF = false } }
 
-                        TooltipPreset("Rename") { IconPreset(Icons.Rounded.Edit) { editTF = true; addTF = false; tfText += item.name } }
+                        TooltipPreset("Edit") { IconPreset(Icons.Rounded.Edit) { editTF = true; addTF = false; tfText += item.name } }
 
                         TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { delete.invoke() } }
 
                     }  /** left icons */
-
 
                     Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 

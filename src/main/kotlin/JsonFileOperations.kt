@@ -21,7 +21,7 @@ class JsonFileOperations {
             file.write(string)
             file.flush()
             file.close()
-        } else println("fail")
+        } else println("createJsonFromList() save fail, string is empty")
     }
 
     fun parseJsonToObjects(): SnapshotStateList<MainClass> {
@@ -29,8 +29,10 @@ class JsonFileOperations {
         val path = Path("data\\database.json")
         if (Files.exists(path)) {
             val jsonContent = File(path.toString()).readText(charset = Charsets.UTF_8)
-            val obj = Json.decodeFromString<List<MainClass>>(jsonContent)
-            mainList.addAll(obj)
+            if (jsonContent != "") {
+                val obj = Json.decodeFromString<List<MainClass>>(jsonContent)
+                mainList.addAll(obj)
+            } else println("parseJsonToObjects() load fail, file is empty")
         }
         return mainList
     }

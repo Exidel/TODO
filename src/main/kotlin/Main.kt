@@ -25,6 +25,7 @@ fun main() = application {
     val mainWindow = rememberWindowState( size = DpSize(360.dp, 500.dp), position = WindowPosition(Alignment.Center) )
     var index by remember { mutableStateOf(0) }
     var description by remember { mutableStateOf(false) }
+    val title = remember { mutableStateOf(if (mainList.isNotEmpty()) mainList[index].name else "") }
 
     Window(state = mainWindow, onCloseRequest = ::exitApplication, title = "TODO", icon = null, undecorated = false, resizable = false) {
 
@@ -34,11 +35,9 @@ fun main() = application {
                 Box(Modifier.align(Alignment.TopStart).fillMaxWidth().height(20.dp).background(Color.Gray))
             }
 
-             MainView(mainList, {index = it}) {
-                description = true
-            }
+            MainView(mainList, index, {index = it}, { description = true }, {title.value = it})
 
-            DescriptionScreen( mainList, { description = it }, index )
+            DescriptionScreen( mainList, { description = it }, index, title.value )
 
         }
 

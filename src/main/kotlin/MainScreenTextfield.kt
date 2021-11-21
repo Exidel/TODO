@@ -1,3 +1,4 @@
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -6,6 +7,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.unit.dp
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -28,7 +30,9 @@ fun MainScreenTF(text: String, textChange: (String) -> Unit, add: () -> Unit) {
             focusedLabelColor = Color.White,
             unfocusedLabelColor = Color.Gray
         ),
-        modifier = Modifier.onKeyEvent {
+        modifier = Modifier
+            .width(280.dp)
+            .onKeyEvent {
             if ((it.key == Key.Enter) && (it.type == KeyEventType.KeyUp)) {
                 add.invoke()
                 tfState = ""

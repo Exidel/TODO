@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TaskListElement(
+fun TaskElement(
         num: String,
         item: MainClass,
         indexChange: () -> Unit,
@@ -59,7 +59,7 @@ fun TaskListElement(
 
                 TooltipPreset("Edit") { IconPreset(Icons.Rounded.Edit) { editTF = true; indexChange.invoke(); title(item.name) } }
 
-                TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { delete.invoke(); save.invoke() } }
+                TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { dragX = 0f; delete.invoke(); save.invoke() } }
 
             } /** Left icons */
 
@@ -72,7 +72,7 @@ fun TaskListElement(
                     .offset { IntOffset(dragX.toInt(), 0) }
                     .draggable(
                         orientation = Orientation.Horizontal,
-                        state = rememberDraggableState { delta -> if (dragX in -10f..70F) dragX += delta },
+                        state = rememberDraggableState { delta -> if (dragX in (-10f..70F)) dragX += delta },
                         onDragStopped = { dragX = if (dragX > 30) 60F else 0f }
                     )
             ) {

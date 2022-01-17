@@ -31,16 +31,18 @@ fun SubTaskElement(
     item: MainClass,
     delete: () -> Unit,
     save: () -> Unit,
+    trigger: () -> Unit,
     spoilerContent: @Composable () -> Unit
 ) {
 
     var dragX by remember { mutableStateOf(0f) }
     var expand by remember { mutableStateOf(false) }
-    var check by remember { mutableStateOf(item.check) }
     var tfText by remember { mutableStateOf("") }
     var addTF by remember { mutableStateOf(false) }
     var editTF by remember { mutableStateOf(false) }
+    var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
 
+    LaunchedEffect(item) { check = item.check }
 
     Box {
 
@@ -56,6 +58,7 @@ fun SubTaskElement(
                             tfText = ""
                             save.invoke()
                             addTF = false
+                            trigger.invoke()
                         }
                     }
 
@@ -71,17 +74,17 @@ fun SubTaskElement(
                     }
 
                 } else {
-
-                    Row(Modifier.padding(start = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+/** left icons */
+                    Row(Modifier.padding(start = 10.dp).align(Alignment.CenterStart), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
                         TooltipPreset("Add subtask") { IconPreset(Icons.Rounded.Add) { addTF = true; editTF = false } }
 
                         TooltipPreset("Edit") { IconPreset(Icons.Rounded.Edit) { editTF = true; addTF = false; tfText += item.name } }
 
-                        TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { delete.invoke() } }
+                        TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { dragX = 0f; delete.invoke() } }
 
-                    }  /** left icons */
-
+                    }
+/** right icons */
                     Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
 //                        Box(
@@ -94,14 +97,16 @@ fun SubTaskElement(
                         TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) {} }
 
                         Text(
-                            text = "Txt",
+                            text = "Tt",
                             textDecoration = TextDecoration.LineThrough,
                             color = Color.White,
-                            modifier = Modifier.padding(start = 3.dp).clickable { check = !check; item.check = check; save.invoke() }
+                            modifier = Modifier
+                                .padding(start = 3.dp)
+                                .clickable { check = !check; item.check = check; save.invoke() }
                         )
 
-                    }  /** right icons */
-
+                    }
+/** draggable element */
                     Box(
                         modifier = Modifier
                             .offset { IntOffset(dragX.toInt(), 0) }
@@ -125,7 +130,7 @@ fun SubTaskElement(
                                 .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
                         )
 
-                    }  /** draggable element */
+                    }
 
                 }
 

@@ -19,6 +19,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
     Box(){
 
         Box(Modifier.padding(top = 20.dp).width(330.dp)){
+
             Column(Modifier
                 .padding(10.dp, 5.dp, 10.dp, 80.dp)
                 .width(330.dp)
@@ -30,7 +31,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
                 if (mainList.isNotEmpty()) {
                     for (i in mainList.indices) {
 
-                        TaskListElement(
+                        TaskElement(
                             num = "#${i + 1} ",
                             item = mainList[i],
                             indexChange = { indexChange(i) },

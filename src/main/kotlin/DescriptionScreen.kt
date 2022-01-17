@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,16 +16,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @Composable
-fun DescriptionScreen(mainList: SnapshotStateList<MainClass>, closeDescription: (Boolean) -> Unit, index: Int, title: String) {
+fun DescriptionScreen(
+        mainList: SnapshotStateList<MainClass>,
+        closeDescription: (Boolean) -> Unit,
+        index: Int,
+        title: String
+) {
 
     val verticalScroll = rememberScrollState(0)
     val horizontalScroll = rememberScrollState(0)
     var addState by remember { mutableStateOf(false) }
     var tfText by remember { mutableStateOf("") }
+    var trigger by remember { mutableStateOf(mainList, neverEqualPolicy()) }
+
+    LaunchedEffect(mainList) { trigger = mainList }
 
 
-    Box( Modifier.padding(start = 360.dp, top = 20.dp).fillMaxSize().border(2.dp, Color.Green) ) {
+    Box( Modifier.padding(start = 360.dp, top = 20.dp).fillMaxSize() ) {
 
         Box(Modifier.padding(end = 5.dp, top = 5.dp).align(Alignment.TopEnd)) {
             IconPreset(Icons.Rounded.Close) { closeDescription(false) }
@@ -57,7 +65,7 @@ fun DescriptionScreen(mainList: SnapshotStateList<MainClass>, closeDescription: 
                     ) {
 
                         if ( mainList.isNotEmpty() && mainList[index].innerList.isNotEmpty() ) {
-                            AddSubTask(mainList[index].innerList) { JsonFileOperations().createJsonFromList(mainList) }
+                            AddSubTask(trigger[index].innerList, { trigger = trigger }) { JsonFileOperations().createJsonFromList(mainList) }
                         }
 
                         if (!addState) {
@@ -122,6 +130,7 @@ fun DescriptionScreen(mainList: SnapshotStateList<MainClass>, closeDescription: 
 @Composable
 fun AddSubTask(
     list: MutableList<MainClass>,
+    trigger: () -> Unit,
     save: () -> Unit
 ) {
 
@@ -133,9 +142,10 @@ fun AddSubTask(
             SubTaskElement(
                 item = item,
                 save = save,
-                delete = { list.remove(item); save.invoke() }
+                trigger = trigger,
+                delete = { list.remove(item); save.invoke(); trigger.invoke() }
             ) {
-                AddSubTask(item.innerList, save)
+                AddSubTask(item.innerList, trigger, save)
             }
 
 

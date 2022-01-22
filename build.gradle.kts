@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "Exidel"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -32,7 +32,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "TODO"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
         }
     }
 }

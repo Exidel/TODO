@@ -1,3 +1,4 @@
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -30,7 +32,9 @@ fun main() = application {
         Box(Modifier.fillMaxSize().background( Color(80, 80, 80, 255) ) ) {
 
             WindowDraggableArea {
-                Box(Modifier.align(Alignment.TopStart).fillMaxWidth().height(20.dp).background(Color.Gray))
+                Box(Modifier.align(Alignment.TopStart).fillMaxWidth().height(30.dp).background(Color.Gray)) {
+                    Image(painter = painterResource("logo.png"), contentDescription = null, modifier = Modifier.align(Alignment.Center))
+                }
             }
 
             MainView(mainList, index, {index = it}, { description = true }, {title.value = it})

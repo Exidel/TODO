@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import task_features.TimerScreen
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -41,6 +42,7 @@ fun SubTaskElement(
     var addTF by remember { mutableStateOf(false) }
     var editTF by remember { mutableStateOf(false) }
     var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
+
 
     LaunchedEffect(item) { check = item.check }
 
@@ -94,7 +96,7 @@ fun SubTaskElement(
 //                                .clickable {  }
 //                        )  /** color picker */
 
-                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) {} }
+                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) {  } }
 
                         Text(
                             text = "Tt",

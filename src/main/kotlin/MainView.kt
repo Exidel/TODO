@@ -18,7 +18,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
 
     Box {
 
-        Box( Modifier.padding(start = 10.dp, bottom = 80.dp).width(342.dp) ) {
+        Box( Modifier.padding(start = 20.dp, bottom = 80.dp).width(342.dp) ) {
 
             Column(Modifier
                     .fillMaxSize()
@@ -61,7 +61,13 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
         }
 
 
-        Row(Modifier.padding(5.dp).align(Alignment.BottomStart).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .padding(start = 20.dp, top = 5.dp, end = 5.dp, bottom = 10.dp)
+                .align(Alignment.BottomStart)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
             MainScreenTF(tfState, {tfState = it}) {
                 if (tfState != "") {

@@ -1,13 +1,9 @@
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -62,10 +58,11 @@ fun DescriptionScreen(
 
                     Column(
                         modifier = Modifier
-                            .padding(bottom = 30.dp)
+                            .padding(start = 20.dp, bottom = 30.dp)
                             .verticalScroll(verticalScroll)
-                            .horizontalScroll(horizontalScroll)
-                            .padding(start = 10.dp)
+                            .horizontalScroll(horizontalScroll),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+//                            .padding(start = 10.dp)
                     ) {
 
                         if ( mainList.isNotEmpty() && mainList[index].innerList.isNotEmpty() ) {

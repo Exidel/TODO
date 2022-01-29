@@ -16,16 +16,14 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
     val columnScroll = rememberScrollState(0)
 
 
-    Box(){
+    Box {
 
-        Box(Modifier.padding(top = 20.dp).width(330.dp)){
+        Box( Modifier.padding(start = 10.dp, bottom = 80.dp).width(342.dp) ) {
 
             Column(Modifier
-                .padding(10.dp, 5.dp, 10.dp, 80.dp)
-                .width(330.dp)
-                .fillMaxHeight()
-                .align(Alignment.TopStart)
-                .verticalScroll(columnScroll)
+                    .fillMaxSize()
+                    .align(Alignment.TopStart)
+                    .verticalScroll(columnScroll)
             ) {
 
                 if (mainList.isNotEmpty()) {
@@ -49,7 +47,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
             VerticalScrollbar(
                 adapter = ScrollbarAdapter(columnScroll),
                 modifier = Modifier
-                    .padding(start = 2.dp, top = 10.dp, end = 2.dp, bottom = 83.dp)
+                    .padding(3.dp)
                     .align(Alignment.TopEnd),
                 style = ScrollbarStyle(
                     minimalHeight = 16.dp,

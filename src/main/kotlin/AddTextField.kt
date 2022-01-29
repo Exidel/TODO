@@ -13,8 +13,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.dp
 
 
@@ -27,7 +33,8 @@ fun AddEditTF(
     add: () -> Unit
 ) {
 
-    var tfText by remember { mutableStateOf(name) }
+    var tfText by remember { mutableStateOf(TextFieldValue( name, TextRange(name.length) ) ) }
+    val focusRequest = remember { FocusRequester() }
 
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
@@ -37,24 +44,31 @@ fun AddEditTF(
             singleLine = true,
             modifier = Modifier
                 .width(300.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-                .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                .background(color = Color.White, shape = RoundedCornerShape(16.dp))
+                .border(width = 3.dp, color = Color(0, 100, 255, 255), shape = RoundedCornerShape(12.dp))
                 .clip(shape = RoundedCornerShape(12.dp))
+                .focusRequester(focusRequest)
                 .onKeyEvent {
+
                     if ((it.key == Key.Enter) && (it.type == KeyEventType.KeyUp)) {
-                        if (tfText != "") {
-                            nameChange(tfText)
-                            tfText = ""
+                        if (tfText.text != "") {
+                            nameChange(tfText.text)
                             add.invoke()
                         }
                         true
+                    } else if ((it.key == Key.Escape) && (it.type == KeyEventType.KeyUp)) {
+                        close.invoke()
+                        true
                     } else {false}
+
                 }
                 .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
         )
 
-        IconPreset(Icons.Rounded.Close) { tfText = ""; close.invoke() }
-        IconPreset(Icons.Rounded.Check) { nameChange(tfText); tfText = ""; add.invoke() }
+        IconPreset(Icons.Rounded.Close) { close.invoke() }
+        IconPreset(Icons.Rounded.Check) { nameChange(tfText.text);  add.invoke() }
+
+        LaunchedEffect(Unit){ focusRequest.requestFocus() }
 
     }
 

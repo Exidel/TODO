@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -34,16 +35,18 @@ fun DescriptionScreen(
     LaunchedEffect(mainList) { trigger = mainList }
 
 
-    Box( Modifier.padding(start = 360.dp, top = 20.dp).fillMaxSize() ) {
+    Box( Modifier.fillMaxSize() ) {
 
-        Box(Modifier.padding(end = 5.dp, top = 5.dp).align(Alignment.TopEnd)) {
-            IconPreset(Icons.Rounded.Close) { closeDescription(false) }
-        }  /** close icon */
+/** close icon */
+        Box(Modifier.padding(start = 5.dp, top = 5.dp).align(Alignment.TopStart)) {
+            IconPreset(Icons.Rounded.ArrowBack) { closeDescription(false) }
+        }
 
         if (mainList.isNotEmpty()) {
 
             Column {
 
+/** Task Title */
                 Text(
                     text = if (mainList[index].name == title) title else mainList[index].name,
                     fontSize = 30.sp,
@@ -52,8 +55,9 @@ fun DescriptionScreen(
                     modifier = Modifier
                         .padding(start = 20.dp, top = 25.dp, end = 20.dp, bottom = 20.dp)
                         .align(Alignment.CenterHorizontally)
-                ) /** Task Title */
+                )
 
+/** SubTask column + scrollbars */
                 Box {
 
                     Column(
@@ -72,10 +76,12 @@ fun DescriptionScreen(
                             AddBox { addState = true }
                         } else {
                             AddEditTF(tfText, {tfText = it}, { addState = false; tfText = "" }) {
-                                addState = false
-                                mainList[index].addItem( MainClass(tfText) )
-                                tfText = ""
-                                JsonFileOperations().createJsonFromList(mainList)
+                                if (tfText != "") {
+                                    addState = false
+                                    mainList[index].addItem( MainClass(tfText) )
+                                    tfText = ""
+                                    JsonFileOperations().createJsonFromList(mainList)
+                                }
                             }
                         }  /** Box + */
 

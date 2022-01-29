@@ -48,7 +48,7 @@ fun SubTaskElement(
 
         Column {
 
-            Box(Modifier.padding(bottom = 2.dp).width(400.dp)) {
+            Box(Modifier.width(400.dp)) {
 
                 if (addTF && !editTF) {
 
@@ -137,10 +137,11 @@ fun SubTaskElement(
             }
 
             AnimatedVisibility(expand) {
-                Column(Modifier.padding(start = 15.dp)) {
+                Column(Modifier.padding(start = 20.dp, top = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     spoilerContent.invoke()
                 }
             }
+
         }
     }
 

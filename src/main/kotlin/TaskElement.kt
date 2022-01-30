@@ -11,8 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +36,7 @@ fun TaskElement(
     var tfText by remember { mutableStateOf("")}
     var editTF by remember { mutableStateOf(false) }
 
-    Box(Modifier.padding(2.dp).fillMaxWidth()) {
+    Box(Modifier.padding(2.dp, 2.dp, 20.dp, 2.dp).width(300.dp)) {
 
 
         if (editTF) {
@@ -63,9 +61,9 @@ fun TaskElement(
 
             } /** Left icons */
 
-            Box(Modifier.padding(end = 10.dp).align(Alignment.CenterEnd)) {
-                IconPreset(Icons.Rounded.Settings) {  }
-            }  /** Right icons */
+//            Box(Modifier.padding(end = 10.dp).align(Alignment.CenterEnd)) {
+//                IconPreset(Icons.Rounded.Settings) {  }
+//            }  /** Right icons */
 
             Box(
                 Modifier
@@ -81,7 +79,7 @@ fun TaskElement(
                     text = num + item.name,
                     fontSize = 13.sp,
                     modifier = Modifier
-                        .padding(end = 38.dp)
+//                        .padding(end = 38.dp)
                         .fillMaxWidth()
                         .align(Alignment.CenterStart)
                         .background(color = Color.White, shape = RoundedCornerShape(12.dp))

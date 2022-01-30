@@ -37,6 +37,10 @@ fun MainScreenTF(text: String, textChange: (String) -> Unit, add: () -> Unit) {
                 add.invoke()
                 tfState = ""
                 true
+            } else if ((it.key == Key.Escape) && (it.type == KeyEventType.KeyUp)) {
+                tfState = ""
+                textChange("")
+                true
             } else {false}
         }
     )

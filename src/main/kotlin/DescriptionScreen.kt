@@ -1,14 +1,15 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,8 +35,8 @@ fun DescriptionScreen(
     Box( Modifier.fillMaxSize() ) {
 
 /** close icon */
-        Box(Modifier.padding(start = 5.dp, top = 5.dp).align(Alignment.TopStart)) {
-            IconPreset(Icons.Rounded.ArrowBack) { closeDescription(false) }
+        Box(Modifier.padding(start = 15.dp, top = 5.dp).align(Alignment.TopStart)) {
+            IconButton(onClick = { closeDescription(false) }) {Icon(painterResource("round_rollback_black_48dp.png"), null, Modifier.size(24.dp), Color.White)}
         }
 
         if (mainList.isNotEmpty()) {
@@ -62,7 +63,6 @@ fun DescriptionScreen(
                             .verticalScroll(verticalScroll)
                             .horizontalScroll(horizontalScroll),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
-//                            .padding(start = 10.dp)
                     ) {
 
                         if ( mainList.isNotEmpty() && mainList[index].innerList.isNotEmpty() ) {
@@ -102,7 +102,7 @@ fun DescriptionScreen(
                     HorizontalScrollbar(
                         adapter = ScrollbarAdapter(horizontalScroll),
                         modifier = Modifier
-                            .padding(start = 10.dp, top = 0.dp, end = 10.dp, bottom = 15.dp)
+                            .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 15.dp)
                             .align(Alignment.BottomStart),
                         style = ScrollbarStyle(
                             minimalHeight = 16.dp,

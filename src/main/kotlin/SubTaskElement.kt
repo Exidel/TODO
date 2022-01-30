@@ -137,7 +137,7 @@ fun SubTaskElement(
             }
 
             AnimatedVisibility(expand) {
-                Column(Modifier.padding(start = 20.dp, top = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Column(Modifier.padding(start = 30.dp, top = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     spoilerContent.invoke()
                 }
             }

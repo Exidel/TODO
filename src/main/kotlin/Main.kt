@@ -22,7 +22,7 @@ import androidx.compose.ui.window.rememberWindowState
 fun main() = application {
 
     val mainList = JsonFileOperations().parseJsonToObjects()
-    val mainWindow = rememberWindowState(size = DpSize(380.dp, 500.dp), position = WindowPosition(Alignment.Center))
+    val mainWindow = rememberWindowState(size = DpSize(400.dp, 500.dp), position = WindowPosition(Alignment.Center))
     var index by remember { mutableStateOf(0) }
     var description by remember { mutableStateOf(false) }
     val title = remember { mutableStateOf(if (mainList.isNotEmpty()) mainList[index].name else "") }

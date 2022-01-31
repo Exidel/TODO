@@ -1,6 +1,8 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -60,7 +62,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
             )
         }
 
-
+/** Add TF + Icon */
         Row(
             modifier = Modifier
                 .padding(start = 20.dp, top = 5.dp, end = 5.dp, bottom = 10.dp)
@@ -75,19 +77,19 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
                     tfState = ""
                     JsonFileOperations().createJsonFromList(mainList)
                 }
-            }  /** Add TextField */
+            }
 
-            AddIcon {
+            IconPreset(Icons.Rounded.Send, width = 48, height = 48) {
                 if (tfState != "") {
                     mainList.add( MainClass(tfState) )
                     tfState = ""
                     JsonFileOperations().createJsonFromList(mainList)
                 }
-            }  /** Add Icon */
+            }
 
         }
-    }
 
+    }
 
 
 }

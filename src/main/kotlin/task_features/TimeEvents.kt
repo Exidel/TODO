@@ -1,20 +1,16 @@
 package task_features
 
+import IconPreset
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.rounded.ExitToApp
-import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ProgressIndicatorDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -36,6 +32,7 @@ class TimeEvents {
 
     @Composable
     fun CountDownTimer(hh: Long = 0, min: Long = 0, sec: Long = 59) {
+
         var key by remember { mutableStateOf(false) }
         var indicator by remember { mutableStateOf(1f) }
         val timerAnimation = animateFloatAsState(targetValue = indicator, animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec).value
@@ -71,18 +68,16 @@ class TimeEvents {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 30.dp).align(Alignment.BottomCenter)
             ) {
-                IconButton(onClick = {key = !key}) { Icon (
-                    painter = if (!key) painterResource("round_play_arrow_black_48dp.png") else painterResource("round_pause_black_48dp.png"),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp),
-                    tint = Color(255, 100, 0)
-                ) }
-                IconButton(onClick = {key = false; formattedTime = millisToTime(0, 2); indicator = 0f}) { Icon (
-                    painter = painterResource( resourcePath = "round_stop_black_48dp.png"),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp),
-                    tint = Color(255, 100, 0)
-                ) }
+                IconPreset(
+                    iconPainter = if (!key) "round_play_arrow_black_48dp.png" else "round_pause_black_48dp.png",
+                    width = 40, height = 40, tint = Color(255, 100, 0)
+                ) { key = !key }
+
+                IconPreset(
+                    iconPainter = "round_stop_black_48dp.png",
+                    width = 40, height = 40, tint = Color(255, 100, 0)
+                ) { key = false; formattedTime = millisToTime(0, 2); indicator = 0f }
+
             }
 
 /** Timer calculation function */

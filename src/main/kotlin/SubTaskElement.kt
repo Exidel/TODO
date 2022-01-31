@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import task_features.TimerScreen
+
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -76,6 +76,7 @@ fun SubTaskElement(
                     }
 
                 } else {
+
 /** left icons */
                     Row(Modifier.padding(start = 10.dp).align(Alignment.CenterStart), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
@@ -86,6 +87,7 @@ fun SubTaskElement(
                         TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { dragX = 0f; delete.invoke() } }
 
                     }
+
 /** right icons */
                     Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
@@ -96,7 +98,7 @@ fun SubTaskElement(
 //                                .clickable {  }
 //                        )  /** color picker */
 
-                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) {  } }
+                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings, width = 19, height = 19) {  } }
 
                         Text(
                             text = "Tt",
@@ -108,6 +110,7 @@ fun SubTaskElement(
                         )
 
                     }
+
 /** draggable element */
                     Box(
                         modifier = Modifier

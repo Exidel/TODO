@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 
+
 @Composable
 fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
 
@@ -37,32 +38,19 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
             Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = { state.isMinimized = !state.isMinimized }) {
-                Icon(
-                    painter = painterResource("round_minimize_black_24dp.png"),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = Color.White
-                ) }
+            IconPreset(iconPainter = "round_minimize_black_24dp.png", width = 20, height = 20) { state.isMinimized = !state.isMinimized }
 
 
-            IconButton(onClick = {
+            IconPreset(
+                iconPainter = if (state.placement == WindowPlacement.Floating) "round_maximize_black_48dp.png" else "round_maximized_black_48dp.png",
+                width = 12, height = 12
+            ) {
                 state.placement =
                     if (state.placement == WindowPlacement.Maximized) WindowPlacement.Floating else WindowPlacement.Maximized
-            }) {
-                Icon(
-                    painter = painterResource(
-                    if (state.placement == WindowPlacement.Floating) "round_maximize_black_48dp.png" else "round_maximized_black_48dp.png"
-                ),
-                    null,
-                    modifier = Modifier.size(12.dp),
-                    tint = Color.White
-                ) }
-
-
-            IconButton(onClick = { exitApp.invoke() }) {
-                Icon(Icons.Rounded.Close, null, Modifier.size(20.dp), Color.White)
             }
+
+
+            IconPreset(Icons.Rounded.Close, width = 20, height = 20) { exitApp.invoke() }
 
 
         }

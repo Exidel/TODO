@@ -1,6 +1,7 @@
 package task_features
 
 import IconPreset
+import MainClass
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,9 +28,69 @@ class TimeEvents {
     }
 
 
-    fun taskDuration() {}
+    @Composable
+    fun taskDuration(item: MainClass) {
+
+        var key by remember { mutableStateOf(false) }
+        var time by remember { mutableStateOf(0L) }
+        var formattedTime by remember { mutableStateOf(millisToTime(time, 0, true)) }
 
 
+        Box(Modifier.fillMaxSize().background(Color.DarkGray)) {
+
+            Text(text = formattedTime, modifier = Modifier.align(Alignment.Center), color = Color.White, fontSize = 44.sp)
+
+/** Timer control buttons */
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 30.dp).align(Alignment.BottomCenter)
+            ) {
+                IconPreset(
+                    iconPainter = if (!key) "round_play_arrow_black_48dp.png" else "round_pause_black_48dp.png",
+                    width = 40, height = 40, tint = Color(255, 100, 0)
+                ) { key = !key }
+
+                IconPreset(
+                    iconPainter = "round_stop_black_48dp.png",
+                    width = 40, height = 40, tint = Color(255, 100, 0)
+                ) { key = false; time = 0; item.duration += time; formattedTime = millisToTime(0) }
+
+            }
+
+            LaunchedEffect(key, time) {
+                    if (key) {
+                        delay(1000)
+                        time += 1000
+                        formattedTime = millisToTime(time)
+                    }
+            }
+
+        }
+
+    }
+
+/** Count full time duration from Task + all subTasks */
+    fun fullDuration(item: MainClass): String {
+        var taskFullDuration: Long = 0
+
+        taskFullDuration = item.duration + recursiveFullDuration(item.innerList)
+
+        return millisToTime(taskFullDuration, 0, true)
+    }
+
+    private fun recursiveFullDuration(list : MutableList<MainClass>): Long {
+        var taskFullDuration: Long = 0
+
+        for (el in list) {
+            taskFullDuration += el.duration
+            taskFullDuration += recursiveFullDuration(el.innerList)
+        }
+        return taskFullDuration
+    }
+
+
+/** Timer from [time] to [0] */
     @Composable
     fun CountDownTimer(hh: Long = 0, min: Long = 0, sec: Long = 59) {
 
@@ -99,10 +160,10 @@ class TimeEvents {
 
 
     /**
-     * Converting milliseconds into formatted String (hh:mm:ss.sss)
-     * @param duration milliseconds Long
-     * @param cutMillisZeroes cuts last 1 or 2 zeroes from milliseconds,
-     * value other than 1 or 2 become 0
+     * Converting milliseconds into formatted String [(dd hh:mm:ss.sss)]
+     * @param duration milliseconds [Long]
+     * @param cutMillisZeroes cuts last [1..3] digits from milliseconds,
+     * value other than [1..3] become [0]
     */
 
     private fun millisToTime(duration: Long, cutMillisZeroes: Int = 0, includeDays: Boolean = false): String {
@@ -113,11 +174,13 @@ class TimeEvents {
         val days: Long = (duration / (1000*3600)) / 24
 
         return if (includeDays) {
-            String.format("%02d:%02d:%02d.%02d", days, hours, minutes, seconds)
+            if (days > 1) { String.format("%d days %02d:%02d.%02d", days, hours, minutes, seconds) }
+            else { String.format("%d day %02d:%02d.%02d", days, hours, minutes, seconds) }
         } else {
             when (cutMillisZeroes) {
                 1 -> String.format("%02d:%02d:%02d.%02d", hours, minutes, seconds, millis/10)
                 2 -> String.format("%02d:%02d:%02d.%d", hours, minutes, seconds, millis/100)
+                3 -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
                 else -> String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis)
             }
         }
@@ -125,9 +188,9 @@ class TimeEvents {
 
     /**
      * Converting parameters value into milliseconds
-     * @param hh range 0..23
-     * @param min range 0..59
-     * @param sec range 0..59
+     * @param hh range [0..23]
+     * @param min range [0..59]
+     * @param sec range [0..59]
     */
 
     private fun timeToMillis(hh: Long = 0, min: Long = 0, sec: Long = 0): Long {

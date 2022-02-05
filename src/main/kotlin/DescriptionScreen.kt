@@ -1,15 +1,26 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CursorDropdownMenu
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.rememberCursorPositionProvider
+import task_features.IconsBox
+import task_features.TimeEvents
+
 
 
 @Composable
@@ -26,15 +37,18 @@ fun DescriptionScreen(
     var tfText by remember { mutableStateOf("") }
     var trigger by remember { mutableStateOf(mainList, neverEqualPolicy()) }
 
+
     LaunchedEffect(mainList) { trigger = mainList }
 
 
-    Box( Modifier.fillMaxSize() ) {
+    Box(Modifier.fillMaxSize()) {
 
-/** close icon */
+/** Back icon */
         Box(Modifier.padding(start = 15.dp, top = 5.dp).align(Alignment.TopStart)) {
             IconPreset(iconPainter = "round_rollback_black_48dp.png", width = 24, height = 24) { closeDescription(false) }
         }
+/** Add date */
+        Box(Modifier.padding(top = 5.dp, end = 15.dp).align(Alignment.TopEnd)) { Text(mainList[index].addDate, color = Color.White) }
 
         if (mainList.isNotEmpty()) {
 

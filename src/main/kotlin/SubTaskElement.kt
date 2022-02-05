@@ -23,7 +23,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.rememberCursorPositionProvider
+import task_features.IconsBox
+import task_features.TimeEvents
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -42,7 +45,7 @@ fun SubTaskElement(
     var addTF by remember { mutableStateOf(false) }
     var editTF by remember { mutableStateOf(false) }
     var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
-
+var popup by remember { mutableStateOf(false) }
 
     LaunchedEffect(item) { check = item.check }
 
@@ -56,7 +59,7 @@ fun SubTaskElement(
 
                     AddEditTF(tfText, {tfText = it}, { addTF = false }) {
                         if (tfText != "") {
-                            item.addItem( MainClass(tfText) )
+                            item.addItem( MainClass(tfText, addDate = TimeEvents().taskAddTime()) )
                             tfText = ""
                             save.invoke()
                             addTF = false
@@ -91,14 +94,7 @@ fun SubTaskElement(
 /** right icons */
                     Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-//                        Box(
-//                            Modifier
-//                                .size(16.dp, 16.dp)
-//                                .background( Brush.sweepGradient( listOf(Color.Cyan, Color.Red, Color.Yellow, Color.Green) ) )
-//                                .clickable {  }
-//                        )  /** color picker */
-
-                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings, width = 19, height = 19) {  } }
+                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) { popup = true } }
 
                         Text(
                             text = "Tt",
@@ -148,6 +144,7 @@ fun SubTaskElement(
             }
 
         }
+        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item) }
     }
 
 }

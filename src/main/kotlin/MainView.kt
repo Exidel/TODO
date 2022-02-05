@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import task_features.TimeEvents
 
 
 @Composable
@@ -73,7 +74,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
 
             MainScreenTF(tfState, {tfState = it}) {
                 if (tfState != "") {
-                    mainList.add( MainClass(tfState) )
+                    mainList.add( MainClass(tfState, addDate = TimeEvents().taskAddTime()) )
                     tfState = ""
                     JsonFileOperations().createJsonFromList(mainList)
                 }
@@ -81,7 +82,7 @@ fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (I
 
             IconPreset(Icons.Rounded.Send, width = 48, height = 48) {
                 if (tfState != "") {
-                    mainList.add( MainClass(tfState) )
+                    mainList.add( MainClass(tfState, addDate = TimeEvents().taskAddTime()) )
                     tfState = ""
                     JsonFileOperations().createJsonFromList(mainList)
                 }

@@ -3,7 +3,6 @@ package task_features
 import IconPreset
 import MainClass
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ProgressIndicatorDefaults
@@ -33,28 +32,30 @@ class TimeEvents {
 
         var key by remember { mutableStateOf(false) }
         var time by remember { mutableStateOf(0L) }
-        var formattedTime by remember { mutableStateOf(millisToTime(time, 0, true)) }
+        var formattedTime by remember { mutableStateOf(millisToTime(time, 3)) }
 
 
-        Box(Modifier.fillMaxSize().background(Color.DarkGray)) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Text(text = formattedTime, modifier = Modifier.align(Alignment.Center), color = Color.White, fontSize = 44.sp)
+            Text(text = formattedTime, modifier = Modifier, color = Color.White, fontSize = 44.sp)
+
+            /** Timer control buttons */
 
 /** Timer control buttons */
             Row(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp).align(Alignment.BottomCenter)
+                modifier = Modifier.padding()
             ) {
                 IconPreset(
                     iconPainter = if (!key) "round_play_arrow_black_48dp.png" else "round_pause_black_48dp.png",
-                    width = 40, height = 40, tint = Color(255, 100, 0)
+                    width = 50, height = 50, tint = Color(255, 100, 0)
                 ) { key = !key }
 
                 IconPreset(
                     iconPainter = "round_stop_black_48dp.png",
-                    width = 40, height = 40, tint = Color(255, 100, 0)
-                ) { key = false; time = 0; item.duration += time; formattedTime = millisToTime(0) }
+                    width = 50, height = 50, tint = Color(255, 100, 0)
+                ) { key = false; time = 0; item.duration += time; formattedTime = millisToTime(0, 3) }
 
             }
 
@@ -62,7 +63,7 @@ class TimeEvents {
                     if (key) {
                         delay(1000)
                         time += 1000
-                        formattedTime = millisToTime(time)
+                        formattedTime = millisToTime(time, 3)
                     }
             }
 
@@ -103,7 +104,7 @@ class TimeEvents {
         var formattedTime by remember { mutableStateOf(millisToTime(currentTime, 2)) }
 
 
-        Box(Modifier.fillMaxSize().background(Color.DarkGray)) {
+        Box {
 
 /** Back and front ProgressIndicator */
             CircularProgressIndicator(
@@ -127,16 +128,16 @@ class TimeEvents {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp).align(Alignment.BottomCenter)
+                modifier = Modifier.padding(top = 140.dp).align(Alignment.Center)
             ) {
                 IconPreset(
                     iconPainter = if (!key) "round_play_arrow_black_48dp.png" else "round_pause_black_48dp.png",
-                    width = 40, height = 40, tint = Color(255, 100, 0)
+                    width = 50, height = 50, tint = Color(255, 100, 0)
                 ) { key = !key }
 
                 IconPreset(
                     iconPainter = "round_stop_black_48dp.png",
-                    width = 40, height = 40, tint = Color(255, 100, 0)
+                    width = 50, height = 50, tint = Color(255, 100, 0)
                 ) { key = false; formattedTime = millisToTime(0, 2); indicator = 0f }
 
             }
@@ -157,6 +158,16 @@ class TimeEvents {
 
     }
 
+
+    @Composable
+    fun TimeStatistic(item: MainClass) {
+
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text( millisToTime(item.duration, 3, true), color = Color.White )
+            Text( fullDuration(item), color = Color.White )
+        }
+
+    }
 
 
     /**

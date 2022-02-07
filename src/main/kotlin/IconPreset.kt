@@ -20,19 +20,19 @@ fun IconPreset(
     onClick: () -> Unit
 ) {
 
-    if ((iconImageVector != null) && iconBitmap == null && iconPainter == null) {
+    if ( (iconImageVector != null) && (iconBitmap == null) && (iconPainter == null) ) {
 
         IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
             Icon( imageVector = iconImageVector, null, tint = tint )
         }
 
-    } else if ((iconImageVector == null) && iconBitmap != null && iconPainter == null) {
+    } else if ( (iconImageVector == null) && (iconBitmap != null) && (iconPainter == null) ) {
 
         IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
             Icon( bitmap = iconBitmap, null, tint = tint )
         }
 
-    } else if ((iconImageVector == null) && iconBitmap == null && iconPainter != null) {
+    } else if ( (iconImageVector == null) && (iconBitmap == null) && (iconPainter != null) ) {
 
         IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
             Icon( painter = painterResource(iconPainter), null, tint = tint )

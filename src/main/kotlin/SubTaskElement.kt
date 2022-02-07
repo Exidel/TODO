@@ -27,6 +27,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.rememberCursorPositionProvider
 import task_features.IconsBox
 import task_features.TimeEvents
+import task_features.TimeEventsScreen
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -144,7 +145,8 @@ var popup by remember { mutableStateOf(false) }
             }
 
         }
-        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item) }
+//        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item) }
+        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { TimeEventsScreen({popup = false}) }
     }
 
 }

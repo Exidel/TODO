@@ -4,12 +4,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.compose") version "1.0.1"
+    id("org.jetbrains.compose") version "1.1.1"
     kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "Exidel"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
@@ -32,7 +32,13 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "TODO"
-            packageVersion = "1.0.1"
+            packageVersion = "1.0.2"
+            version = "1.0.2"
+            vendor = "Exidel"
+            description = "Simple TODO application to manage random tasks"
+            windows {
+                iconFile.set(project.file("src\\main\\resources\\todo.ico"))
+            }
         }
     }
 }

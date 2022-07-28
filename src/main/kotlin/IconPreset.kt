@@ -17,24 +17,25 @@ fun IconPreset(
     width: Int = 19,
     height: Int = 19,
     tint: Color = Color.White,
+    mod: Modifier = Modifier.size(width = width.dp, height = height.dp),
     onClick: () -> Unit
 ) {
 
     if ( (iconImageVector != null) && (iconBitmap == null) && (iconPainter == null) ) {
 
-        IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
+        IconButton( onClick = { onClick.invoke() }, modifier = mod ) {
             Icon( imageVector = iconImageVector, null, tint = tint )
         }
 
     } else if ( (iconImageVector == null) && (iconBitmap != null) && (iconPainter == null) ) {
 
-        IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
+        IconButton( onClick = { onClick.invoke() }, modifier = mod ) {
             Icon( bitmap = iconBitmap, null, tint = tint )
         }
 
     } else if ( (iconImageVector == null) && (iconBitmap == null) && (iconPainter != null) ) {
 
-        IconButton(onClick = { onClick.invoke() }, modifier = Modifier.size(width.dp, height.dp)) {
+        IconButton( onClick = { onClick.invoke() }, modifier = mod ) {
             Icon( painter = painterResource(iconPainter), null, tint = tint )
         }
 

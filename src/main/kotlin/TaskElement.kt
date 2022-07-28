@@ -1,4 +1,3 @@
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun TaskElement(
         num: String,
@@ -61,9 +60,6 @@ fun TaskElement(
 
             } /** Left icons */
 
-//            Box(Modifier.padding(end = 10.dp).align(Alignment.CenterEnd)) {
-//                IconPreset(Icons.Rounded.Settings) {  }
-//            }  /** Right icons */
 
             Box(
                 Modifier
@@ -79,7 +75,6 @@ fun TaskElement(
                     text = num + item.name,
                     fontSize = 13.sp,
                     modifier = Modifier
-//                        .padding(end = 38.dp)
                         .fillMaxWidth()
                         .align(Alignment.CenterStart)
                         .background(color = Color.White, shape = RoundedCornerShape(12.dp))

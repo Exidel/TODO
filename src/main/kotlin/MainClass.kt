@@ -8,7 +8,11 @@ data class MainClass(
     var check: Boolean = false,
     val innerList: MutableList<MainClass> = mutableListOf(),
 /** Feature properties */
-    var test: Boolean = false
+    /** Time */
+    var addDate: String = "",
+    var duration: Long = 0,
+    /** Colors */
+//    var bg: Color = Color.White
 ) {
 
     fun addItem(nestedItem: MainClass) {

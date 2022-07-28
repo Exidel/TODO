@@ -1,15 +1,12 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,15 +26,18 @@ fun DescriptionScreen(
     var tfText by remember { mutableStateOf("") }
     var trigger by remember { mutableStateOf(mainList, neverEqualPolicy()) }
 
+
     LaunchedEffect(mainList) { trigger = mainList }
 
 
-    Box( Modifier.fillMaxSize() ) {
+    Box(Modifier.fillMaxSize()) {
 
-/** close icon */
+/** Back icon */
         Box(Modifier.padding(start = 15.dp, top = 5.dp).align(Alignment.TopStart)) {
-            IconButton(onClick = { closeDescription(false) }) {Icon(painterResource("round_rollback_black_48dp.png"), null, Modifier.size(24.dp), Color.White)}
+            IconPreset(iconPainter = "round_rollback_black_48dp.png", width = 24, height = 24) { closeDescription(false) }
         }
+/** Add date */
+        Box(Modifier.padding(top = 5.dp, end = 15.dp).align(Alignment.TopEnd)) { Text(mainList[index].addDate, color = Color.White) }
 
         if (mainList.isNotEmpty()) {
 

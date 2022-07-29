@@ -12,7 +12,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -42,9 +41,8 @@ fun AddEditTF(
             singleLine = true,
             modifier = Modifier
                 .width(300.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(16.dp))
-                .border(width = 3.dp, color = Color(0, 100, 255, 255), shape = RoundedCornerShape(12.dp))
-                .clip(shape = RoundedCornerShape(12.dp))
+                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+                .border(width = 2.dp, color = Color(0, 100, 255, 255), shape = RoundedCornerShape(12.dp))
                 .focusRequester(focusRequest)
                 .onKeyEvent {
 

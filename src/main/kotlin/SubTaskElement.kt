@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Settings
@@ -44,9 +43,8 @@ fun SubTaskElement(
     var addTF by remember { mutableStateOf(false) }
     var editTF by remember { mutableStateOf(false) }
     var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
-var popup by remember { mutableStateOf(false) }
+    var popup by remember { mutableStateOf(false) }
 
-    LaunchedEffect(item) { check = item.check }
 
     Box {
 
@@ -54,19 +52,7 @@ var popup by remember { mutableStateOf(false) }
 
             Box(Modifier.width(400.dp)) {
 
-                if (addTF && !editTF) {
-
-                    AddEditTF(tfText, {tfText = it}, { addTF = false }) {
-                        if (tfText != "") {
-                            item.addItem( MainClass(tfText, addDate = TimeEvents().taskAddTime()) )
-                            tfText = ""
-                            save.invoke()
-                            addTF = false
-                            trigger.invoke()
-                        }
-                    }
-
-                } else if (editTF && !addTF) {
+                if (editTF && !addTF) {
 
                     AddEditTF(item.name, {tfText = it}, { editTF = false; tfText = "" }) {
                         if (tfText != "") {
@@ -82,23 +68,21 @@ var popup by remember { mutableStateOf(false) }
 /** left icons */
                     Row(Modifier.padding(start = 10.dp).align(Alignment.CenterStart), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                        TooltipPreset("Add subtask") { IconPreset( Icons.Rounded.Add, mod = Modifier
-                            .size(19.dp)
-                            .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
-                            .padding(1.dp)
-                        ) { addTF = true; editTF = false } }
+                        TooltipPreset("Edit") {
+                            IconPreset(Icons.Rounded.Edit, mod = Modifier
+                                .size(19.dp)
+                                .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
+                                .padding(1.dp)
+                            ) { editTF = true; addTF = false; tfText += item.name }
+                        }
 
-                        TooltipPreset("Edit") { IconPreset(Icons.Rounded.Edit, mod = Modifier
-                            .size(19.dp)
-                            .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
-                            .padding(1.dp)
-                        ) { editTF = true; addTF = false; tfText += item.name } }
-
-                        TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete, mod = Modifier
-                            .size(19.dp)
-                            .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
-                            .padding(1.dp)
-                        ) { dragX = 0f; delete.invoke() } }
+                        TooltipPreset("Delete") {
+                            IconPreset(Icons.Rounded.Delete, mod = Modifier
+                                .size(19.dp)
+                                .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
+                                .padding(1.dp)
+                            ) { dragX = 0f; delete.invoke() }
+                        }
 
                     }
 
@@ -124,8 +108,8 @@ var popup by remember { mutableStateOf(false) }
                             .offset { IntOffset(dragX.toInt(), 0) }
                             .draggable(
                                 orientation = Orientation.Horizontal,
-                                state = rememberDraggableState { delta -> if (dragX in -10f..100F) dragX += delta },
-                                onDragStopped = { dragX = if (dragX > 45) 90F else 0f }
+                                state = rememberDraggableState { delta -> if (dragX in -10f..75F) dragX += delta },
+                                onDragStopped = { dragX = if (dragX > 45) 65F else 0f }
                             )
                     ) {
 
@@ -148,21 +132,33 @@ var popup by remember { mutableStateOf(false) }
 
             }
 
-            AnimatedVisibility(
-                expand,
-                Modifier
-                    .padding(top = 4.dp)
-//                    .background( brush = Brush.horizontalGradient(
-//                        listOf( Color(255, 255, 255, 75), Color.Transparent ),
-//                        endX = 200f), RoundedCornerShape(5.dp) )
-//                    .padding(top = 4.dp, bottom = 4.dp)
-            ) {
-                Box(Modifier.background( brush = Brush.horizontalGradient(
-                    listOf( Color(255, 255, 255, 75), Color.Transparent ),
-                    endX = 200f), RoundedCornerShape(5.dp) )) {
-                    Column(Modifier.padding(start = 30.dp, top = 4.dp, bottom = 4.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                        spoilerContent.invoke()
-                    }
+            AnimatedVisibility(expand) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(3.dp),
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .background( brush = Brush.horizontalGradient(
+                            listOf( Color(255, 255, 255, 75), Color.Transparent ),
+                            endX = 200f), RoundedCornerShape(5.dp) )
+                        .padding(start = 30.dp, top = 8.dp, bottom = 8.dp)
+                ) {
+
+                    spoilerContent.invoke()
+
+                    if (!addTF) {
+                        AddBox { addTF = true; editTF = false; tfText = "" }
+                    } else {
+                        AddEditTF(tfText, {tfText = it}, { addTF = false }) {
+                            if (tfText != "") {
+                                item.addItem( MainClass(tfText, addDate = TimeEvents().taskAddTime()) )
+                                tfText = ""
+                                save.invoke()
+                                addTF = false
+                                trigger.invoke()
+                            }
+                        }
+                    }  /** Box + */
+
                 }
             }
 

@@ -1,5 +1,8 @@
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -27,10 +30,7 @@ fun DescriptionScreen(
     var trigger by remember { mutableStateOf(mainList, neverEqualPolicy()) }
 
 
-    LaunchedEffect(mainList) { trigger = mainList }
-
-
-    Box(Modifier.fillMaxSize()) {
+    Box {
 
 /** Back icon */
         Box(Modifier.padding(start = 15.dp, top = 5.dp).align(Alignment.TopStart)) {

@@ -13,21 +13,23 @@ import task_features.TimeEvents
 
 
 @Composable
-fun MainView(mainList: SnapshotStateList<MainClass>, index: Int, indexChange: (Int) -> Unit, winSize: () -> Unit, title: (String) -> Unit) {
+fun MainView(
+    mainList: SnapshotStateList<MainClass>,
+    index: Int,
+    indexChange: (Int) -> Unit,
+    winSize: () -> Unit,
+    title: (String) -> Unit
+) {
 
     var tfState by remember { mutableStateOf("") }
     val columnScroll = rememberScrollState(0)
 
-
+/** Main List */
     Box {
 
         Box( Modifier.padding(start = 20.dp, bottom = 80.dp).width(342.dp) ) {
 
-            Column(Modifier
-                    .fillMaxSize()
-                    .align(Alignment.TopStart)
-                    .verticalScroll(columnScroll)
-            ) {
+            Column( Modifier.verticalScroll(columnScroll) ) {
 
                 if (mainList.isNotEmpty()) {
                     for (i in mainList.indices) {

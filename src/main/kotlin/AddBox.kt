@@ -25,7 +25,7 @@ fun AddBox(addState: () -> Unit) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .width(300.dp)
-                .background(color = Color.Transparent, shape = RoundedCornerShape(12.dp))
+                .background(color = Color(80, 80, 80, 255), shape = RoundedCornerShape(12.dp))
                 .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(12.dp))
                 .clip(shape = RoundedCornerShape(12.dp))
                 .clickable { addState.invoke() }

@@ -1,15 +1,16 @@
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalMinimumTouchTargetEnforcement
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -28,28 +29,38 @@ fun main() = application {
     val title = remember { mutableStateOf(if (mainList.isNotEmpty()) mainList[index].name else "") }
 
 
-CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
 
-    Window( state = mainWindow, onCloseRequest = ::exitApplication, undecorated = true ) {
+        Window(
+            state = mainWindow,
+            onCloseRequest = ::exitApplication,
+            undecorated = true,
+            transparent = true,
+            icon = painterResource("todo.ico")
+        ) {
 
-        Box(Modifier.fillMaxSize().background(Color(80, 80, 80, 255))) {
+        Box( Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(10.dp))
+            .background( Color(80, 80, 80, 255) )
+        ) {
 
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                WindowDraggableArea { ApplicationTopBar(mainWindow) { exitApplication() } }
+                    WindowDraggableArea { ApplicationTopBar(mainWindow) { exitApplication() } }
 
-                if (!description) {
-                    MainView(mainList, index, { index = it }, { description = true }, { title.value = it })
-                } else {
-                    DescriptionScreen(mainList, { description = it }, index, title.value)
+                    if (!description) {
+                        MainView(mainList, index, { index = it }, { description = true }, { title.value = it })
+                    } else {
+                        DescriptionScreen(mainList, { description = it }, index, title.value)
+                    }
+
                 }
 
             }
 
         }
-
     }
-}
 
 
 }

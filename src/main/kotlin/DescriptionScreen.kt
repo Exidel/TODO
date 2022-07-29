@@ -65,10 +65,12 @@ fun DescriptionScreen(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
 
+                        // Items list
                         if ( mainList.isNotEmpty() && mainList[index].innerList.isNotEmpty() ) {
                             AddSubTask(trigger[index].innerList, { trigger = trigger }) { JsonFileOperations().createJsonFromList(mainList) }
                         }
 
+                        // Box +
                         if (!addState) {
                             AddBox { addState = true }
                         } else {
@@ -80,7 +82,7 @@ fun DescriptionScreen(
                                     JsonFileOperations().createJsonFromList(mainList)
                                 }
                             }
-                        }  /** Box + */
+                        }  // Box +
 
                     }
 
@@ -139,7 +141,7 @@ fun AddSubTask(
 
 
     if (list.isNotEmpty()) {
-        for (item in list) {
+        for (item in list.sortedBy { it.check }) {
 
 
             SubTaskElement(

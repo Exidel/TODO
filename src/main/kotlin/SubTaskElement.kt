@@ -15,7 +15,7 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
@@ -44,6 +44,8 @@ fun SubTaskElement(
     var editTF by remember { mutableStateOf(false) }
     var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
     var popup by remember { mutableStateOf(false) }
+
+    LaunchedEffect(item) { check = item.check }
 
 
     Box {
@@ -97,36 +99,37 @@ fun SubTaskElement(
                             color = Color.White,
                             modifier = Modifier
                                 .padding(start = 3.dp)
-                                .clickable { check = !check; item.check = check; save.invoke() }
+                                .clickable {
+                                    check = !check
+                                    item.check = check
+                                    save.invoke()
+                                    expand = false
+                                    trigger.invoke()
+                                }
                         )
 
                     }
 
 /** draggable element */
-                    Box(
+                    Text(
+                        text = if (item.name != "") item.name else "",
+                        fontSize = 13.sp,
+                        textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
+                        color = if (item.check) Color(50, 50, 50, 255) else Color.Black,
                         modifier = Modifier
+                            .width(300.dp)
                             .offset { IntOffset(dragX.toInt(), 0) }
+                            .shadow(8.dp, RoundedCornerShape(12.dp))
+                            .background(color = if (item.check) Color(200, 200, 200, 255) else Color.White, shape = RoundedCornerShape(12.dp))
+                            .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                            .clickable { expand = !expand }
+                            .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
                             .draggable(
                                 orientation = Orientation.Horizontal,
                                 state = rememberDraggableState { delta -> if (dragX in -10f..75F) dragX += delta },
                                 onDragStopped = { dragX = if (dragX > 45) 65F else 0f }
                             )
-                    ) {
-
-                        Text(
-                            text = if (item.name != "") item.name else "",
-                            fontSize = 13.sp,
-                            textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
-                            modifier = Modifier
-                                .width(300.dp)
-                                .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-                                .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
-                                .clip(shape = RoundedCornerShape(12.dp))
-                                .clickable { expand = !expand }
-                                .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
-                        )
-
-                    }
+                    )
 
                 }
 

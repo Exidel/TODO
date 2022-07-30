@@ -37,7 +37,8 @@ fun main() = application {
             onCloseRequest = ::exitApplication,
             undecorated = true,
             transparent = true,
-            icon = painterResource("todo.ico")
+            icon = painterResource("todo.ico"),
+            title = "TODO()"
         ) {
 
         Box( Modifier

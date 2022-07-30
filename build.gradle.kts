@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "Exidel"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -32,10 +32,10 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "TODO"
-            packageVersion = "1.0.2"
-            version = "1.0.2"
+            packageVersion = "1.0.3"
+            version = "1.0.3"
             vendor = "Exidel"
-            description = "Simple TODO application to manage random tasks"
+            description = "TODO()"
             windows {
                 iconFile.set(project.file("src\\main\\resources\\todo.ico"))
             }

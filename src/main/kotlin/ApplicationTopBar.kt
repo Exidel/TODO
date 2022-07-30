@@ -43,7 +43,7 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
             Modifier
                 .size(40.dp)
                 .clickable(
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple( color = Color(250,250,250) )
                 ) {  }
         ) {
@@ -59,6 +59,7 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
 // Window icons
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(0.dp),
             modifier = Modifier.align(Alignment.CenterEnd)
         ) {
 
@@ -67,7 +68,7 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
                 Modifier
                     .size(40.dp)
                     .clickable(
-                        interactionSource = MutableInteractionSource(),
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple( color = Color(250,250,250) )
                     ) { state.isMinimized = !state.isMinimized }
             ) {
@@ -85,7 +86,7 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
                 Modifier
                     .size(40.dp)
                     .clickable(
-                        interactionSource = MutableInteractionSource(),
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple( color = Color(250,250,250) )
                     ) {
                         state.placement =
@@ -111,7 +112,7 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
                     .onPointerEvent(PointerEventType.Enter) { hover = true }
                     .onPointerEvent(PointerEventType.Exit) { hover = false }
                     .clickable(
-                        interactionSource = MutableInteractionSource(),
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple( color = Color(0f,0f,0f) )
                     ) { exitApp.invoke() }
             ) {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,8 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 
 
@@ -39,21 +40,16 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
 
 
 // Menu
-        Box(
-            Modifier
-                .size(40.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple( color = Color(250,250,250) )
-                ) {  }
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Menu,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
+        MainMenu(
+            resetWindow = {
+                state.position = WindowPosition(Alignment.Center)
+                state.size = DpSize(400.dp, 500.dp)
+            },
+            exit = {
+                FileOperations.saveSettings(state)
+                exitApp.invoke()
+            }
+        )
 
 
 // Window icons
@@ -113,8 +109,11 @@ fun ApplicationTopBar(state: WindowState, exitApp: () -> Unit) {
                     .onPointerEvent(PointerEventType.Exit) { hover = false }
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple( color = Color(0f,0f,0f) )
-                    ) { exitApp.invoke() }
+                        indication = rememberRipple( color = Color.Black )
+                    ) {
+                        FileOperations.saveSettings(state)
+                        exitApp.invoke()
+                    }
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,

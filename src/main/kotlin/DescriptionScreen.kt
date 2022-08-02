@@ -67,7 +67,7 @@ fun DescriptionScreen(
 
                         // Items list
                         if ( mainList.isNotEmpty() && mainList[index].innerList.isNotEmpty() ) {
-                            AddSubTask(trigger[index].innerList, { trigger = trigger }) { JsonFileOperations().createJsonFromList(mainList) }
+                            AddSubTask(trigger[index].innerList, { trigger = trigger }) { JsonFileOperations.createJsonFromList(mainList) }
                         }
 
                         // Box +
@@ -79,7 +79,7 @@ fun DescriptionScreen(
                                     addState = false
                                     mainList[index].addItem( MainClass(tfText) )
                                     tfText = ""
-                                    JsonFileOperations().createJsonFromList(mainList)
+                                    JsonFileOperations.createJsonFromList(mainList)
                                 }
                             }
                         }  // Box +

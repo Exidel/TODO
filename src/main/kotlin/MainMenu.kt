@@ -25,8 +25,6 @@ fun BoxScope.MainMenu(
 ) {
 
     var expand by remember { mutableStateOf(false) }
-//    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
-
 
     Box(
         Modifier
@@ -54,7 +52,7 @@ fun BoxScope.MainMenu(
                 .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
         ) {
 
-            Text(text = "Reset window", maxLines = 1, color = Color.White, modifier = Modifier
+            Text(text = Labels.resetWindow, maxLines = 1, color = Color.White, modifier = Modifier
                 .fillMaxWidth()
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -66,7 +64,7 @@ fun BoxScope.MainMenu(
             Divider(color = Color.LightGray)
 
 
-            Text(text = "Exit", maxLines = 1, color = Color.White, modifier = Modifier
+            Text(text = Labels.exit, maxLines = 1, color = Color.White, modifier = Modifier
                 .fillMaxWidth()
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },

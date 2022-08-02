@@ -54,9 +54,9 @@ fun TaskElement(
 
             Row(Modifier.padding(start = 10.dp).align(Alignment.CenterStart), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                TooltipPreset("Edit") { IconPreset(Icons.Rounded.Edit) { editTF = true; indexChange.invoke(); title(item.name) } }
+                TooltipPreset(Labels.edit) { IconPreset(Icons.Rounded.Edit) { editTF = true; indexChange.invoke(); title(item.name) } }
 
-                TooltipPreset("Delete") { IconPreset(Icons.Rounded.Delete) { dragX = 0f; delete.invoke(); save.invoke() } }
+                TooltipPreset(Labels.delete) { IconPreset(Icons.Rounded.Delete) { dragX = 0f; delete.invoke(); save.invoke() } }
 
             } /** Left icons */
 

@@ -40,7 +40,7 @@ fun MainView(
                             indexChange = { indexChange(i) },
                             winSize = { indexChange(i); winSize.invoke() },
                             delete = { if (i>0) indexChange(i-1) else indexChange(0); mainList.removeAt(i) },
-                            save = { JsonFileOperations().createJsonFromList(mainList) },
+                            save = { JsonFileOperations.createJsonFromList(mainList) },
                             title = title
                         )
 
@@ -78,7 +78,7 @@ fun MainView(
                 if (tfState != "") {
                     mainList.add( MainClass(tfState, addDate = TimeEvents().taskAddTime()) )
                     tfState = ""
-                    JsonFileOperations().createJsonFromList(mainList)
+                    JsonFileOperations.createJsonFromList(mainList)
                 }
             }
 
@@ -86,7 +86,7 @@ fun MainView(
                 if (tfState != "") {
                     mainList.add( MainClass(tfState, addDate = TimeEvents().taskAddTime()) )
                     tfState = ""
-                    JsonFileOperations().createJsonFromList(mainList)
+                    JsonFileOperations.createJsonFromList(mainList)
                 }
             }
 

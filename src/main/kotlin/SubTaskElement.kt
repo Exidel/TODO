@@ -70,7 +70,7 @@ fun SubTaskElement(
 /** left icons */
                     Row(Modifier.padding(start = 10.dp).align(Alignment.CenterStart), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                        TooltipPreset("Edit") {
+                        TooltipPreset(Labels.edit) {
                             IconPreset(Icons.Rounded.Edit, mod = Modifier
                                 .size(19.dp)
                                 .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
@@ -78,7 +78,7 @@ fun SubTaskElement(
                             ) { editTF = true; addTF = false; tfText += item.name }
                         }
 
-                        TooltipPreset("Delete") {
+                        TooltipPreset(Labels.delete) {
                             IconPreset(Icons.Rounded.Delete, mod = Modifier
                                 .size(19.dp)
                                 .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
@@ -91,10 +91,10 @@ fun SubTaskElement(
 /** right icons */
                     Row(Modifier.padding(end = 40.dp).align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
 
-                        TooltipPreset("Settings") { IconPreset(Icons.Rounded.Settings) { popup = true } }
+                        TooltipPreset(Labels.settings) { IconPreset(Icons.Rounded.Settings) { popup = true } }
 
                         Text(
-                            text = "Tt",
+                            text = Labels.crossedText,
                             textDecoration = TextDecoration.LineThrough,
                             color = Color.White,
                             modifier = Modifier

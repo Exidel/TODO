@@ -34,7 +34,7 @@ fun DescriptionScreen(
 
 /** Back icon */
         Box(Modifier.padding(start = 15.dp, top = 5.dp).align(Alignment.TopStart)) {
-            IconPreset(iconPainter = "round_rollback_black_48dp.png", width = 24, height = 24) { closeDescription(false) }
+            IconPreset(iconPainter = "round_rollback_black_48dp.png", width = 32, height = 32) { closeDescription(false) }
         }
 /** Add date */
         Box(Modifier.padding(top = 5.dp, end = 15.dp).align(Alignment.TopEnd)) { Text(mainList[index].addDate, color = Color.White) }

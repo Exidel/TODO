@@ -3,11 +3,13 @@
 
 object Labels {
 // MainMenu
-    val resetWindow = "Reset window"
-    val exit = "Exit"
-//Element icons
-    val edit = "Edit"
-    val delete = "Delete"
-    val settings = "Settings"
-    val crossedText = "Tt"
+    const val resetWindow = "Reset window"
+    const val exit = "Exit"
+// Element icons
+    const val edit = "Edit"
+    const val delete = "Delete"
+    const val settings = "Settings"
+    const val crossedText = "Tt"
+// Error message
+    const val errorMessage = "You have uncompleted subtasks"
 }

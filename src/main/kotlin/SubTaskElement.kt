@@ -1,4 +1,4 @@
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.rememberCursorPositionProvider
+import kotlinx.coroutines.delay
 import task_features.IconsBox
 import task_features.TimeEvents
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SubTaskElement(
     item: MainClass,
@@ -44,8 +46,26 @@ fun SubTaskElement(
     var editTF by remember { mutableStateOf(false) }
     var check by remember { mutableStateOf(item.check, neverEqualPolicy()) }
     var popup by remember { mutableStateOf(false) }
+    var showErrorMessage by remember { mutableStateOf(false) }
 
     LaunchedEffect(item) { check = item.check }
+    LaunchedEffect(showErrorMessage) { delay(2000); showErrorMessage = false }
+
+
+    AnimatedVisibility(
+        visible = showErrorMessage,
+        enter = fadeIn() + slideInVertically() + scaleIn() + expandVertically(),
+        exit = fadeOut() + slideOutVertically() + shrinkVertically()
+    ) {
+        Text(
+            text = Labels.errorMessage,
+            color = Color.White,
+            modifier = Modifier
+                .background(Color(80,80,80), RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0.8f, 0.8f, 0.8f), RoundedCornerShape(12.dp))
+                .padding(20.dp, 5.dp)
+        )
+    }
 
 
     Box {
@@ -100,11 +120,23 @@ fun SubTaskElement(
                             modifier = Modifier
                                 .padding(start = 3.dp)
                                 .clickable {
-                                    check = !check
-                                    item.check = check
-                                    save.invoke()
-                                    expand = false
-                                    trigger.invoke()
+                                    when {
+                                        !checkDescendantOnDone(item.innerList) && item.check -> {
+                                            check = !check
+                                            item.check = check
+                                            save.invoke()
+                                            expand = false
+                                            trigger.invoke()
+                                        }
+                                        checkDescendantOnDone(item.innerList) -> {
+                                            check = !check
+                                            item.check = check
+                                            save.invoke()
+                                            expand = false
+                                            trigger.invoke()
+                                        }
+                                        else -> showErrorMessage = true
+                                    }
                                 }
                         )
 
@@ -169,9 +201,16 @@ fun SubTaskElement(
 
         if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item) }
 
+
+
     }
 
 }
 
 
-
+/** Recursively checking if all hierarchy descendants are done */
+fun checkDescendantOnDone(list: List<MainClass>): Boolean {
+    return if (list.isNotEmpty()) {
+        list.all { it.check } && list.all { checkDescendantOnDone(it.innerList) }
+    } else true
+}

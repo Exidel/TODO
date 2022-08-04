@@ -82,7 +82,7 @@ fun DescriptionScreen(
                                     JsonFileOperations.createJsonFromList(mainList)
                                 }
                             }
-                        }  // Box +
+                        }
 
                     }
 
@@ -131,7 +131,7 @@ fun DescriptionScreen(
 
 
 
-/** Recursive function */
+/** Build tasks list hierarchy recursively */
 @Composable
 fun AddSubTask(
     list: MutableList<MainClass>,
@@ -139,10 +139,8 @@ fun AddSubTask(
     save: () -> Unit
 ) {
 
-
     if (list.isNotEmpty()) {
         for (item in list.sortedBy { it.check }) {
-
 
             SubTaskElement(
                 item = item,
@@ -152,7 +150,6 @@ fun AddSubTask(
             ) {
                 AddSubTask(item.innerList, trigger, save)
             }
-
 
         }
     }

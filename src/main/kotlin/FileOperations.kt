@@ -16,19 +16,25 @@ object FileOperations {
 
     fun loadSettings(): Settings {
 
-        var obj = Settings()
+        val list = mutableListOf<String>()
 
         if (File("settings.txt").exists()) {
             try {
-                val list = File("settings.txt").readLines()
-                if (list.isNotEmpty()) {
-                    obj = Settings(
-                        size = if (list.size >= 2) DpSize(list[0].toInt().dp, list[1].toInt().dp) else Settings().size,
-                        position = if (list.size >= 4) WindowPosition(list[2].toInt().dp, list[3].toInt().dp) else Settings().position
-                    )
+                val fileListStrings = File("settings.txt").readLines()
+                if (fileListStrings.isNotEmpty()) {
+                    list.addAll(fileListStrings)
                 }
             } catch (e: Exception) { e.printStackTrace() }
         }
+
+        val obj = if (list.isNotEmpty()) {
+            Settings(
+                size = if (list.size >= 2 && list[0] != "" && list[1] != "")
+                    DpSize(list[0].toInt().dp, list[1].toInt().dp) else Settings().size,
+                position = if (list.size >= 4 && list[2] != "" && list[3] != "")
+                    WindowPosition(list[2].toInt().dp, list[3].toInt().dp) else Settings().position
+            )
+        } else Settings()
 
         return obj
     }

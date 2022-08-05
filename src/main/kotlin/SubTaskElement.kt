@@ -1,4 +1,5 @@
 import androidx.compose.animation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
@@ -29,7 +31,7 @@ import task_features.IconsBox
 import task_features.TimeEvents
 
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun SubTaskElement(
     item: MainClass,
@@ -125,14 +127,14 @@ fun SubTaskElement(
                                             check = !check
                                             item.check = check
                                             save.invoke()
-                                            expand = false
+                                            if (item.check) expand = false
                                             trigger.invoke()
                                         }
                                         checkDescendantOnDone(item.innerList) -> {
                                             check = !check
                                             item.check = check
                                             save.invoke()
-                                            expand = false
+                                            if (item.check) expand = false
                                             trigger.invoke()
                                         }
                                         else -> showErrorMessage = true
@@ -143,11 +145,9 @@ fun SubTaskElement(
                     }
 
 /** draggable element */
-                    Text(
-                        text = if (item.name != "") item.name else "",
-                        fontSize = 13.sp,
-                        textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
-                        color = if (item.check) Color(50, 50, 50, 255) else Color.Black,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .width(300.dp)
                             .offset { IntOffset(dragX.toInt(), 0) }
@@ -161,7 +161,25 @@ fun SubTaskElement(
                                 state = rememberDraggableState { delta -> if (dragX in -10f..75F) dragX += delta },
                                 onDragStopped = { dragX = if (dragX > 45) 65F else 0f }
                             )
-                    )
+                    ) {
+                        Text(
+                            text = if (item.name != "") item.name else "",
+                            fontSize = 13.sp,
+                            textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
+                            color = if (item.check) Color(50, 50, 50, 255) else Color.Black,
+                            modifier = Modifier.weight(1f, false)
+                        )
+
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(5.dp),
+                            modifier = Modifier.height(IntrinsicSize.Min).padding(horizontal = 5.dp)
+                        ) {
+                            Text("${getTaskStat(item.innerList).first}", color = Color(0, 150, 0))
+                            Divider(Modifier.fillMaxHeight().width(1.dp), Color.DarkGray, 1.dp)
+                            Text("${getTaskStat(item.innerList).second}", color = Color(150, 0, 0))
+                        }
+                    }
 
                 }
 
@@ -213,4 +231,10 @@ fun checkDescendantOnDone(list: List<MainClass>): Boolean {
     return if (list.isNotEmpty()) {
         list.all { it.check } && list.all { checkDescendantOnDone(it.innerList) }
     } else true
+}
+
+
+/** Get number of active and completed tasks */
+fun getTaskStat(list: List<MainClass>): Pair<Int, Int> {
+    return Pair(list.filter { !it.check }.size, list.filter { it.check }.size)
 }

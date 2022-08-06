@@ -1,5 +1,4 @@
 import androidx.compose.animation.*
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,7 +30,7 @@ import task_features.IconsBox
 import task_features.TimeEvents
 
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SubTaskElement(
     item: MainClass,
@@ -52,6 +51,13 @@ fun SubTaskElement(
 
     LaunchedEffect(item) { check = item.check }
     LaunchedEffect(showErrorMessage) { delay(2000); showErrorMessage = false }
+
+    if (item.check && !checkDescendantOnDone(item.innerList)) LaunchedEffect(Unit) {
+        check = !check
+        item.check = check
+        expand = false
+        trigger.invoke()
+    }
 
 
     AnimatedVisibility(

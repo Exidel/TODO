@@ -49,6 +49,11 @@ fun SubTaskElement(
     var popup by remember { mutableStateOf(false) }
     var showErrorMessage by remember { mutableStateOf(false) }
 
+/** Item colors */
+    val bg = Color(item.bg[0], item.bg[1], item.bg[2], item.bg[3])
+    val border = Color(item.border[0], item.border[1], item.border[2], item.border[3])
+    val text = Color(item.text[0], item.text[1], item.text[2], item.text[3])
+
     LaunchedEffect(item) { check = item.check }
     LaunchedEffect(showErrorMessage) { delay(2000); showErrorMessage = false }
 
@@ -158,8 +163,8 @@ fun SubTaskElement(
                             .width(300.dp)
                             .offset { IntOffset(dragX.toInt(), 0) }
                             .shadow(8.dp, RoundedCornerShape(12.dp))
-                            .background(color = if (item.check) Colors.completedItemBG else Colors.itemBG, shape = RoundedCornerShape(12.dp))
-                            .border(width = 1.dp, color = Colors.itemBorder, shape = RoundedCornerShape(12.dp))
+                            .background(color = if (item.check) Colors.completedItemBG else bg, shape = RoundedCornerShape(12.dp))
+                            .border(width = 1.dp, color = border, shape = RoundedCornerShape(12.dp))
                             .clickable { expand = !expand }
                             .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
                             .draggable(
@@ -172,7 +177,7 @@ fun SubTaskElement(
                             text = if (item.name != "") item.name else "",
                             fontSize = 13.sp,
                             textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
-                            color = if (item.check) Colors.completedTextColor else Colors.textColor,
+                            color = if (item.check) Colors.completedTextColor else text,
                             modifier = Modifier.weight(1f, false)
                         )
 
@@ -223,7 +228,7 @@ fun SubTaskElement(
 
         }
 
-        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item) }
+        if (popup) Popup(onDismissRequest = {popup = false}, popupPositionProvider = rememberCursorPositionProvider(), focusable = true) { IconsBox(item, save, trigger) }
 
 
 

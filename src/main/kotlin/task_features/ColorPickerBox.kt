@@ -15,14 +15,15 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ColorPickerBox(
-    colors: List<Color>,
+    item: MainClass,
     cancel: () -> Unit,
-    newColors: (List<Color>) -> Unit
+    save: () -> Unit,
+    trigger: () -> Unit
 ) {
 
-    var bgColor by remember { mutableStateOf(colors.first()) }
-    var borderColor by remember { mutableStateOf(colors[1]) }
-    var textColor by remember { mutableStateOf(colors.last()) }
+    var bgColor by remember { mutableStateOf(Color(item.bg[0], item.bg[1], item.bg[2], item.bg[3])) }
+    var borderColor by remember { mutableStateOf(Color(item.border[0], item.border[1], item.border[2], item.border[3])) }
+    var textColor by remember { mutableStateOf(Color(item.text[0], item.text[1], item.text[2], item.text[3])) }
 
     var bg by remember { mutableStateOf(true) }
     var border by remember { mutableStateOf(false) }
@@ -31,6 +32,7 @@ fun ColorPickerBox(
     var bgColorUpdated by remember { mutableStateOf(bgColor) }
     var borderColorUpdated by remember { mutableStateOf(borderColor) }
     var textColorUpdated by remember { mutableStateOf(textColor) }
+
 
     Box(Modifier.fillMaxSize().padding(15.dp, 15.dp)) {
 
@@ -44,7 +46,7 @@ fun ColorPickerBox(
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
 
-
+/** Item representation */
                 Box(
                     Modifier
                         .width(250.dp)
@@ -53,11 +55,12 @@ fun ColorPickerBox(
                         .padding(10.dp, 4.dp)
                 ) { Text("Sample Text", color = textColorUpdated) }
 
-
+/** Icon background */
                 Box(
                     Modifier
                         .size(24.dp)
-                        .clip(RoundedCornerShape(6.dp))
+                        .clip(RoundedCornerShape(4.dp))
+                        .border(1.dp, if (bg) Color.LightGray else Color.Transparent, RoundedCornerShape(4.dp))
                         .clickable {
                             bg = true; border = false; text = false
                             borderColor = borderColorUpdated; textColor = textColorUpdated
@@ -71,11 +74,12 @@ fun ColorPickerBox(
                     )
                 }
 
-
+/** Icon border */
                 Box(
                     Modifier
                         .size(24.dp)
                         .clip(RoundedCornerShape(4.dp))
+                        .border(1.dp, if (border) Color.LightGray else Color.Transparent, RoundedCornerShape(4.dp))
                         .clickable {
                             bg = false; border = true; text = false
                             bgColor = bgColorUpdated; textColor = textColorUpdated
@@ -90,13 +94,14 @@ fun ColorPickerBox(
                     )
                 }
 
-
+/** Icon text */
                 Text(
                     text = "Aa",
                     color = Color.Red,
                     fontSize = 16.sp,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
+                        .border(1.dp, if (text) Color.LightGray else Color.Transparent, RoundedCornerShape(4.dp))
                         .clickable {
                             bg = false; border = false; text = true
                             bgColor = bgColorUpdated; borderColor = borderColorUpdated
@@ -107,12 +112,29 @@ fun ColorPickerBox(
 
             }
 
-
+/** Row with buttons */
             Row(
                 horizontalArrangement = Arrangement.spacedBy(15.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.align(Alignment.End).padding(top = 20.dp, end = 20.dp)
             ) {
+
+                Box(
+                    Modifier
+                        .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable {
+                            bgColor = Colors.itemBG
+                            borderColor = Colors.itemBorder
+                            textColor = Colors.textColor
+                            bgColorUpdated = Colors.itemBG
+                            borderColorUpdated = Colors.itemBorder
+                            textColorUpdated = Colors.textColor
+                        }
+                        .padding(10.dp, 4.dp)
+                ) {
+                    Text("Reset", color = Color.LightGray, modifier = Modifier.align(Alignment.Center))
+                }
 
 
                 Box(
@@ -120,7 +142,11 @@ fun ColorPickerBox(
                         .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp))
                         .clip(RoundedCornerShape(12.dp))
                         .clickable {
-                            newColors( listOf(bgColorUpdated, borderColorUpdated, textColorUpdated) )
+                            item.bg = listOf(bgColorUpdated.red, bgColorUpdated.green, bgColorUpdated.blue, bgColorUpdated.alpha)
+                            item.border = listOf(borderColorUpdated.red, borderColorUpdated.green, borderColorUpdated.blue, borderColorUpdated.alpha)
+                            item.text = listOf(textColorUpdated.red, textColorUpdated.green, textColorUpdated.blue, textColorUpdated.alpha)
+                            save.invoke()
+                            trigger.invoke()
                             cancel.invoke()
                         }
                         .padding(10.dp, 4.dp)

@@ -1,6 +1,7 @@
 package task_features
 
 import ColorPickerBox
+import Colors
 import IconPreset
 import MainClass
 import androidx.compose.foundation.background
@@ -25,11 +26,15 @@ import androidx.compose.ui.window.rememberDialogState
 
 
 @Composable
-fun IconsBox(item: MainClass) {
+fun IconsBox(
+    item: MainClass,
+    save: () -> Unit,
+    trigger: () -> Unit
+) {
 
     var openDialog by remember { mutableStateOf(false) }
-    var colorList = listOf<Color>()
 
+/** Box with icons */
     Box( Modifier.clip(shape = RoundedCornerShape(8.dp)).size(150.dp).background(Color.DarkGray).border(2.dp, Color.LightGray, RoundedCornerShape(8.dp)) ) {
 
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -48,14 +53,14 @@ fun IconsBox(item: MainClass) {
                         .size(19.dp, 19.dp)
                         .background( Brush.sweepGradient( listOf(Color.Cyan, Color.Red, Color.Yellow, Color.Green) ) )
                         .clickable { openDialog = true }
-                )  /** color picker */
+                )  /** color picker icon */
             }
 
         }
     }
 
 
-// Color picker dialog
+/** Color picker dialog */
     if (openDialog) {
 
         val dialogState = rememberDialogState(size = DpSize(450.dp, 500.dp))
@@ -68,14 +73,14 @@ fun IconsBox(item: MainClass) {
             transparent = true,
             resizable = false
         ) {
-            Column(Modifier.clip(RoundedCornerShape(10.dp)).fillMaxSize().background(Color(80,80,80))) {
+            Column(Modifier.clip(RoundedCornerShape(10.dp)).fillMaxSize().background(Colors.bg)) {
                 WindowDraggableArea {
                     Box(Modifier.fillMaxWidth().height(40.dp)) {
                         Text("Color picker", Modifier.align(Alignment.Center), Color.White )
                     }
                 }
                 Divider(Modifier.fillMaxWidth().shadow(8.dp), Color.Gray)
-                ColorPickerBox(listOf(Color.Red, Color.Green, Color.Blue), { openDialog = false }) { colorList = it }
+                ColorPickerBox(item, { openDialog = false }, save, trigger)
             }
         }
 

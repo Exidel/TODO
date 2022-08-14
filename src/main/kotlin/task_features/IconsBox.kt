@@ -1,5 +1,6 @@
 package task_features
 
+import ColorPickerBox
 import IconPreset
 import MainClass
 import androidx.compose.foundation.background
@@ -7,18 +8,27 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.window.WindowDraggableArea
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.rememberDialogState
 
 
 @Composable
 fun IconsBox(item: MainClass) {
+
+    var openDialog by remember { mutableStateOf(false) }
+    var colorList = listOf<Color>()
 
     Box( Modifier.clip(shape = RoundedCornerShape(8.dp)).size(150.dp).background(Color.DarkGray).border(2.dp, Color.LightGray, RoundedCornerShape(8.dp)) ) {
 
@@ -37,11 +47,40 @@ fun IconsBox(item: MainClass) {
                         .clip(RoundedCornerShape(4.dp))
                         .size(19.dp, 19.dp)
                         .background( Brush.sweepGradient( listOf(Color.Cyan, Color.Red, Color.Yellow, Color.Green) ) )
-                        .clickable {  }
+                        .clickable { openDialog = true }
                 )  /** color picker */
             }
 
         }
     }
+
+
+// Color picker dialog
+    if (openDialog) {
+
+        val dialogState = rememberDialogState(size = DpSize(450.dp, 500.dp))
+
+        Dialog(
+            onCloseRequest = { openDialog = false },
+            state = dialogState,
+            title = "Color picker",
+            undecorated = true,
+            transparent = true,
+            resizable = false
+        ) {
+            Column(Modifier.clip(RoundedCornerShape(10.dp)).fillMaxSize().background(Color(80,80,80))) {
+                WindowDraggableArea {
+                    Box(Modifier.fillMaxWidth().height(40.dp)) {
+                        Text("Color picker", Modifier.align(Alignment.Center), Color.White )
+                    }
+                }
+                Divider(Modifier.fillMaxWidth().shadow(8.dp), Color.Gray)
+                ColorPickerBox(listOf(Color.Red, Color.Green, Color.Blue), { openDialog = false }) { colorList = it }
+            }
+        }
+
+    }
+
+
 
 }

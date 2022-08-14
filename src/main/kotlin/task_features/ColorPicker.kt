@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 /**
  * Basic color picker
  * @param initialColor given start color to change
+ * @param iconsColor tint color for color and alpha rectangle icons
  * @param shadeBoxSize size which will be applied to color box, color rect height and alpha rect width
  * @param colorRectWidth size which will be applied to color rect width and alpha rect height
  * @param boxCursorSize size for color picker box circle cursor
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ColorPicker(
     initialColor: Color = Color.Red,
+    iconsColor: Color = Color.Black,
     shadeBoxSize: Int = 255,
     colorRectWidth: Int = 20,
     boxCursorSize: Int = 20,
@@ -43,155 +45,123 @@ fun ColorPicker(
     onColorChange: (Color) -> Unit
 ) {
 
-    var color by remember { mutableStateOf(getShadeBoxBackground(initialColor)) }
-    var colorShade by remember { mutableStateOf(color) }
-    var resultColor by remember { mutableStateOf(colorShade) }
+    val correctShadeBoxSize = if (shadeBoxSize > 0) shadeBoxSize else 255
+    val correctColorRectWidth = if (colorRectWidth > 0) colorRectWidth else 20
+    val correctCursorSize = if (boxCursorSize > 0) boxCursorSize else 20
+    val correctArrangement = if (arrangement >= 0) arrangement else 20
 
-    var x by remember { mutableStateOf(getShadeCursorOffset(initialColor, shadeBoxSize).x) }  // Shade box cursor position X
-    var y by remember { mutableStateOf(getShadeCursorOffset(initialColor, shadeBoxSize).y) }  // Shade box cursor position Y
-    var colorPosY by remember { mutableStateOf(getColorCursorPosition(initialColor, shadeBoxSize)) }  // Color rectangle cursor position Y
-    var alphaPosX by remember { mutableStateOf(getAlphaCursorPosition(initialColor, shadeBoxSize)) }  // Alpha rectangle cursor position X
+    var x by remember { mutableStateOf(getShadeCursorOffset(initialColor, correctShadeBoxSize).x) }  // Shade box cursor position X
+    var y by remember { mutableStateOf(getShadeCursorOffset(initialColor, correctShadeBoxSize).y) }  // Shade box cursor position Y
+    var colorPosY by remember { mutableStateOf(getColorCursorPosition(initialColor, correctShadeBoxSize)) }  // Color rectangle cursor position Y
+    var alphaPosX by remember { mutableStateOf(getAlphaCursorPosition(initialColor, correctShadeBoxSize)) }  // Alpha rectangle cursor position X
+
+    var color by remember { mutableStateOf(getShadeBoxBackground(initialColor)) }
+    var colorShade by remember { mutableStateOf(getColorShade(color, Offset(x, y), correctShadeBoxSize)) }
+    var resultColor by remember { mutableStateOf(colorShade) }
 
     LaunchedEffect(initialColor) {
         color = getShadeBoxBackground(initialColor)
-        x = getShadeCursorOffset(initialColor, shadeBoxSize).x
-        y = getShadeCursorOffset(initialColor, shadeBoxSize).y
-        colorPosY = getColorCursorPosition(initialColor, shadeBoxSize)
-        alphaPosX = getAlphaCursorPosition(initialColor, shadeBoxSize)
+        x = getShadeCursorOffset(initialColor, correctShadeBoxSize).x
+        y = getShadeCursorOffset(initialColor, correctShadeBoxSize).y
+        colorPosY = getColorCursorPosition(initialColor, correctShadeBoxSize)
+        alphaPosX = getAlphaCursorPosition(initialColor, correctShadeBoxSize)
     }  // Call if for some reason you want to change initial color right in changing process
-    LaunchedEffect(color) { colorShade = getColorShade(color, Offset(x, y), if (shadeBoxSize > 0) shadeBoxSize else 255) }  // Call on RAW color change to change shade color
-    LaunchedEffect(colorShade) { resultColor = colorShade.copy(alpha = getAlpha(Offset(alphaPosX, 0f), shadeBoxSize)) }  // Call on color shade change to change result color
+    LaunchedEffect(color) { colorShade = getColorShade(color, Offset(x, y), correctShadeBoxSize) }  // Call on RAW color change to change shade color
+    LaunchedEffect(colorShade) { resultColor = colorShade.copy(alpha = getAlpha(Offset(alphaPosX, 0f), correctShadeBoxSize)) }  // Call on color shade change to change result color
 
     onColorChange(resultColor)  // return complete color
 
 
-    if (shadeBoxSize > 0 && colorRectWidth > 0 && arrangement >= 0) {
 
-        Column(verticalArrangement = Arrangement.spacedBy(arrangement.dp)) {
 
-            Row(horizontalArrangement = Arrangement.spacedBy(arrangement.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(correctArrangement.dp)) {
+
+        Row(horizontalArrangement = Arrangement.spacedBy(correctArrangement.dp)) {
 
 // Shade box
-                Box(Modifier.clip(RectangleShape)) {
-                    Box(
-                        Modifier
-                            .size(shadeBoxSize.dp)
-                            .background(brush = Brush.horizontalGradient( listOf(Color.White, color) ) )
-                    )
-
-                    Box(
-                        Modifier
-                            .size(shadeBoxSize.dp)
-                            .background(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
-                            .onPointerEvent(PointerEventType.Press) {
-                                val position = it.changes.first().position
-                                colorShade = getColorShade(color, position, shadeBoxSize)
-                                x = position.x
-                                y = position.y
-                            }
-                            .pointerInput(Unit) {
-                                detectDragGestures { change, _ ->
-                                    x = (change.position.x).coerceIn(0f..shadeBoxSize.toFloat())
-                                    y = (change.position.y).coerceIn(0f..shadeBoxSize.toFloat())
-                                    colorShade = getColorShade(color, Offset(x, y), shadeBoxSize)
-                                }
-                            }
-                    )
-
-
-// Shade picker cursor
-                    Box(
-                        Modifier
-                            .offset {
-                                IntOffset(
-                                    x = x.toInt() - getCenter(boxCursorSize).x.toInt(),
-                                    y = y.toInt() - getCenter(boxCursorSize).y.toInt()
-                                )
-                            }
-                            .size(boxCursorSize.dp)
-                            .border(2.dp, Color.Gray, CircleShape)
-                    )
-                }
-
-// Vertical color rectangle
-                Row {
-
-                    Icon(
-                        painter = painterResource("arrow_right.png"),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .offset { IntOffset(0, colorPosY.toInt() - 5) }
-                            .size(10.dp)
-                    )
-
-                    Box(
-                        Modifier
-                            .size(colorRectWidth.dp, shadeBoxSize.dp)
-                            .background(brush = Brush.verticalGradient( listOf(
-                                Color.Red, Color(1f, 0f, 1f),
-                                Color.Blue, Color(0f, 1f, 1f),
-                                Color.Green, Color(1f, 1f, 0f),
-                                Color.Red
-                            ), tileMode = TileMode.Repeated ) )
-                            .onPointerEvent(PointerEventType.Press) {
-                                val position = it.changes.first().position
-                                colorPosY = position.y
-                                color = getColor(color, position, shadeBoxSize)
-                            }
-                            .pointerInput(Unit) {
-                                detectDragGestures { change, _ ->
-                                    colorPosY = (change.position.y).coerceIn(0f..shadeBoxSize.toFloat())
-                                    color = getColor(color, change.position, shadeBoxSize)
-                                }
-                            }
-
-                    )
-
-                    Icon(
-                        painter = painterResource("arrow_left.png"),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .offset { IntOffset(0, colorPosY.toInt() - 5) }
-                            .size(10.dp)
-                    )
-
-                }
-
-            }
-
-        }
-
-// Horizontal alpha rectangle
-        Column {
-
-            Icon(
-                painter = painterResource("arrow_down.png"),
-                contentDescription = null,
-                modifier = Modifier
-                    .offset { IntOffset(alphaPosX.toInt() - 5, 0) }
-                    .size(10.dp)
-            )
-
-            Box(Modifier.size(shadeBoxSize.dp, colorRectWidth.dp)) {
-
-                Image(painterResource("chess_texture_gray.jpg"), null, contentScale = ContentScale.Crop)
+            Box(Modifier.clip(RectangleShape)) {
+                Box(
+                    Modifier
+                        .size(correctShadeBoxSize.dp)
+                        .background(brush = Brush.horizontalGradient( listOf(Color.White, color) ) )
+                )
 
                 Box(
                     Modifier
-                        .size(shadeBoxSize.dp, colorRectWidth.dp)
-                        .background(brush = Brush.horizontalGradient( listOf(Color.Transparent, colorShade) ) )
+                        .size(correctShadeBoxSize.dp)
+                        .background(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
                         .onPointerEvent(PointerEventType.Press) {
                             val position = it.changes.first().position
-                            alphaPosX = position.x
-                            resultColor = colorShade.copy(alpha = getAlpha(position, shadeBoxSize))
+                            colorShade = getColorShade(color, position, correctShadeBoxSize)
+                            x = position.x
+                            y = position.y
                         }
                         .pointerInput(Unit) {
                             detectDragGestures { change, _ ->
-                                alphaPosX = (change.position.x).coerceIn(0f..shadeBoxSize.toFloat())
-                                resultColor = colorShade.copy(alpha = getAlpha(change.position, shadeBoxSize))
+                                x = (change.position.x).coerceIn(0f..correctShadeBoxSize.toFloat())
+                                y = (change.position.y).coerceIn(0f..correctShadeBoxSize.toFloat())
+                                colorShade = getColorShade(color, Offset(x, y), correctShadeBoxSize)
+                            }
+                        }
+                )
+
+
+// Shade picker cursor
+                Box(
+                    Modifier
+                        .offset {
+                            IntOffset(
+                                x = x.toInt() - getCenter(correctCursorSize).x.toInt(),
+                                y = y.toInt() - getCenter(correctCursorSize).y.toInt()
+                            )
+                        }
+                        .size(correctCursorSize.dp)
+                        .border(2.dp, Color.Gray, CircleShape)
+                )
+            }
+
+// Vertical color rectangle
+            Row {
+
+                Icon(
+                    painter = painterResource("color_picker_icons/arrow_right.png"),
+                    contentDescription = null,
+                    tint = iconsColor,
+                    modifier = Modifier
+                        .offset { IntOffset(0, colorPosY.toInt() - 5) }
+                        .size(10.dp)
+                )
+
+                Box(
+                    Modifier
+                        .size(correctColorRectWidth.dp, correctShadeBoxSize.dp)
+                        .background(brush = Brush.verticalGradient( listOf(
+                            Color.Red, Color(1f, 0f, 1f),
+                            Color.Blue, Color(0f, 1f, 1f),
+                            Color.Green, Color(1f, 1f, 0f),
+                            Color.Red
+                        ), tileMode = TileMode.Repeated ) )
+                        .onPointerEvent(PointerEventType.Press) {
+                            val position = it.changes.first().position
+                            colorPosY = position.y
+                            color = getColor(color, position, correctShadeBoxSize)
+                        }
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, _ ->
+                                colorPosY = (change.position.y).coerceIn(0f..correctShadeBoxSize.toFloat())
+                                color = getColor(color, change.position, correctShadeBoxSize)
                             }
                         }
 
+                )
+
+                Icon(
+                    painter = painterResource("color_picker_icons/arrow_left.png"),
+                    contentDescription = null,
+                    tint = iconsColor,
+                    modifier = Modifier
+                        .offset { IntOffset(0, colorPosY.toInt() - 5) }
+                        .size(10.dp)
                 )
 
             }
@@ -199,6 +169,46 @@ fun ColorPicker(
         }
 
     }
+
+// Horizontal alpha rectangle
+    Column {
+
+        Icon(
+            painter = painterResource("color_picker_icons/arrow_down.png"),
+            contentDescription = null,
+            tint = iconsColor,
+            modifier = Modifier
+                .offset { IntOffset(alphaPosX.toInt() - 5, 0) }
+                .size(10.dp)
+        )
+
+        Box(Modifier.size(correctShadeBoxSize.dp, correctColorRectWidth.dp)) {
+
+            Image(painterResource("color_picker_icons/chess_texture_gray.jpg"), null, contentScale = ContentScale.Crop)
+
+            Box(
+                Modifier
+                    .size(correctShadeBoxSize.dp, correctColorRectWidth.dp)
+                    .background(brush = Brush.horizontalGradient( listOf(Color.Transparent, colorShade) ) )
+                    .onPointerEvent(PointerEventType.Press) {
+                        val position = it.changes.first().position
+                        alphaPosX = position.x
+                        resultColor = colorShade.copy(alpha = getAlpha(position, correctShadeBoxSize))
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, _ ->
+                            alphaPosX = (change.position.x).coerceIn(0f..correctShadeBoxSize.toFloat())
+                            resultColor = colorShade.copy(alpha = getAlpha(change.position, correctShadeBoxSize))
+                        }
+                    }
+
+            )
+
+        }
+
+    }
+
+
 
 
 

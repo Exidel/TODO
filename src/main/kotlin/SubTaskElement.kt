@@ -69,7 +69,7 @@ fun SubTaskElement(
             text = Labels.errorMessage,
             color = Color.White,
             modifier = Modifier
-                .background(Color(80,80,80), RoundedCornerShape(12.dp))
+                .background(Colors.bg, RoundedCornerShape(12.dp))
                 .border(1.dp, Color(0.8f, 0.8f, 0.8f), RoundedCornerShape(12.dp))
                 .padding(20.dp, 5.dp)
         )
@@ -101,7 +101,7 @@ fun SubTaskElement(
                         TooltipPreset(Labels.edit) {
                             IconPreset(Icons.Rounded.Edit, mod = Modifier
                                 .size(19.dp)
-                                .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
+                                .background( Colors.bg, RoundedCornerShape(5.dp) )
                                 .padding(1.dp)
                             ) { editTF = true; addTF = false; tfText += item.name }
                         }
@@ -109,7 +109,7 @@ fun SubTaskElement(
                         TooltipPreset(Labels.delete) {
                             IconPreset(Icons.Rounded.Delete, mod = Modifier
                                 .size(19.dp)
-                                .background( Color(80,80,80,255), RoundedCornerShape(5.dp) )
+                                .background( Colors.bg, RoundedCornerShape(5.dp) )
                                 .padding(1.dp)
                             ) { dragX = 0f; delete.invoke() }
                         }
@@ -158,8 +158,8 @@ fun SubTaskElement(
                             .width(300.dp)
                             .offset { IntOffset(dragX.toInt(), 0) }
                             .shadow(8.dp, RoundedCornerShape(12.dp))
-                            .background(color = if (item.check) Color(200, 200, 200, 255) else Color.White, shape = RoundedCornerShape(12.dp))
-                            .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                            .background(color = if (item.check) Colors.completedItemBG else Colors.itemBG, shape = RoundedCornerShape(12.dp))
+                            .border(width = 1.dp, color = Colors.itemBorder, shape = RoundedCornerShape(12.dp))
                             .clickable { expand = !expand }
                             .padding(start = 10.dp, 3.dp, 3.dp, 3.dp)
                             .draggable(
@@ -172,7 +172,7 @@ fun SubTaskElement(
                             text = if (item.name != "") item.name else "",
                             fontSize = 13.sp,
                             textDecoration = if (check) TextDecoration.LineThrough else TextDecoration.None,
-                            color = if (item.check) Color(50, 50, 50, 255) else Color.Black,
+                            color = if (item.check) Colors.completedTextColor else Colors.textColor,
                             modifier = Modifier.weight(1f, false)
                         )
 
@@ -181,9 +181,9 @@ fun SubTaskElement(
                             horizontalArrangement = Arrangement.spacedBy(5.dp),
                             modifier = Modifier.height(IntrinsicSize.Min).padding(horizontal = 5.dp)
                         ) {
-                            Text("${getTaskStat(item.innerList).first}", color = Color(0, 150, 0))
+                            Text("${getTaskStat(item.innerList).first}", color = Colors.activeTask)
                             Divider(Modifier.fillMaxHeight().width(1.dp), Color.DarkGray, 1.dp)
-                            Text("${getTaskStat(item.innerList).second}", color = Color(150, 0, 0))
+                            Text("${getTaskStat(item.innerList).second}", color = Colors.completedTask)
                         }
                     }
 

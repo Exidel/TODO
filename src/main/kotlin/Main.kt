@@ -9,7 +9,6 @@ import androidx.compose.material.LocalMinimumTouchTargetEnforcement
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -41,7 +40,7 @@ fun main() = application {
 
         Box( Modifier
             .clip(RoundedCornerShape(10.dp))
-            .background( Color(80, 80, 80, 255) )
+            .background( Colors.bg )
         ) {
 
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {

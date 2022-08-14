@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,11 +73,12 @@ fun TaskElement(
                 Text(
                     text = num + item.name,
                     fontSize = 13.sp,
+                    color = Colors.textColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterStart)
-                        .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-                        .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(12.dp))
+                        .background(color = Colors.itemBG, shape = RoundedCornerShape(12.dp))
+                        .border(width = 1.dp, color = Colors.itemBorder, shape = RoundedCornerShape(12.dp))
                         .clip(shape = RoundedCornerShape(12.dp))
                         .clickable { winSize.invoke(); title(item.name) }
                         .padding(start = 10.dp, 3.dp, 5.dp, 3.dp)

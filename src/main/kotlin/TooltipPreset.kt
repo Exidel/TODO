@@ -23,7 +23,7 @@ fun TooltipPreset(text: String, content: @Composable () -> Unit) {
                 text = text,
                 modifier = Modifier
                     .background( Color.White, RoundedCornerShape(12.dp) )
-                    .padding(4.dp)
+                    .padding(8.dp, 4.dp)
             )
           },
         delayMillis = 100,

@@ -3,6 +3,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import task_features.color_picker.ColorPalette
 import java.io.File
 import java.io.FileWriter
 import java.nio.file.Files
@@ -35,6 +36,29 @@ object JsonFileOperations {
             } else println("parseJsonToObjects() load fail, file is empty")
         }
         return mainList
+    }
+
+    fun createColorPalette(list: List<ColorPalette>) {
+        val jsonFormat = Json { prettyPrint = true }
+        val string = if (list.isNotEmpty()) jsonFormat.encodeToString(list) else ""
+        val path = Path("data")
+        if (Files.notExists(path)) Files.createDirectory(path)
+        File("data/color_palette.json").writeText(string, Charsets.UTF_8)
+
+    }
+
+    fun loadColorPalette(): SnapshotStateList<ColorPalette> {
+        val list = mutableStateListOf<ColorPalette>()
+        val path = Path("data/color_palette.json")
+        if (Files.exists(path)) {
+            val jsonContent = File(path.toString()).readText(Charsets.UTF_8)
+            if (jsonContent.isNotEmpty()) {
+                val obj = Json.decodeFromString<List<ColorPalette>>(jsonContent)
+                list.addAll(obj)
+            }
+        }
+
+        return list
     }
 
 }

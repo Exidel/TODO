@@ -1,3 +1,5 @@
+package task_features.color_picker
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -65,12 +67,18 @@ fun ColorPicker(
         y = getShadeCursorOffset(initialColor, correctShadeBoxSize).y
         colorPosY = getColorCursorPosition(initialColor, correctShadeBoxSize)
         alphaPosX = getAlphaCursorPosition(initialColor, correctShadeBoxSize)
+        colorShade = getColorShade(color, Offset(x, y), correctShadeBoxSize)
+        resultColor = colorShade
     }  // Call if for some reason you want to change initial color right in changing process
+
     LaunchedEffect(color) { colorShade = getColorShade(color, Offset(x, y), correctShadeBoxSize) }  // Call on RAW color change to change shade color
-    LaunchedEffect(colorShade) { resultColor = colorShade.copy(alpha = getAlpha(Offset(alphaPosX, 0f), correctShadeBoxSize)) }  // Call on color shade change to change result color
 
-    onColorChange(resultColor)  // return complete color
+    LaunchedEffect(colorShade) {
+        resultColor = colorShade.copy(alpha = getAlpha(Offset(alphaPosX, 0f), correctShadeBoxSize))
+        onColorChange(resultColor)  // return complete color
+    }  // Call on color shade change to change result color
 
+    LaunchedEffect(alphaPosX) { onColorChange(resultColor) }
 
 
 
@@ -168,48 +176,45 @@ fun ColorPicker(
 
         }
 
-    }
-
 // Horizontal alpha rectangle
-    Column {
+        Column {
 
-        Icon(
-            painter = painterResource("color_picker_icons/arrow_down.png"),
-            contentDescription = null,
-            tint = iconsColor,
-            modifier = Modifier
-                .offset { IntOffset(alphaPosX.toInt() - 5, 0) }
-                .size(10.dp)
-        )
-
-        Box(Modifier.size(correctShadeBoxSize.dp, correctColorRectWidth.dp)) {
-
-            Image(painterResource("color_picker_icons/chess_texture_gray.jpg"), null, contentScale = ContentScale.Crop)
-
-            Box(
-                Modifier
-                    .size(correctShadeBoxSize.dp, correctColorRectWidth.dp)
-                    .background(brush = Brush.horizontalGradient( listOf(Color.Transparent, colorShade) ) )
-                    .onPointerEvent(PointerEventType.Press) {
-                        val position = it.changes.first().position
-                        alphaPosX = position.x
-                        resultColor = colorShade.copy(alpha = getAlpha(position, correctShadeBoxSize))
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGestures { change, _ ->
-                            alphaPosX = (change.position.x).coerceIn(0f..correctShadeBoxSize.toFloat())
-                            resultColor = colorShade.copy(alpha = getAlpha(change.position, correctShadeBoxSize))
-                        }
-                    }
-
+            Icon(
+                painter = painterResource("color_picker_icons/arrow_down.png"),
+                contentDescription = null,
+                tint = iconsColor,
+                modifier = Modifier
+                    .offset { IntOffset(alphaPosX.toInt() - 5, 0) }
+                    .size(10.dp)
             )
+
+            Box(Modifier.size(correctShadeBoxSize.dp, correctColorRectWidth.dp)) {
+
+                Image(painterResource("color_picker_icons/chess_texture_gray.jpg"), null, contentScale = ContentScale.Crop)
+
+                Box(
+                    Modifier
+                        .size(correctShadeBoxSize.dp, correctColorRectWidth.dp)
+                        .background(brush = Brush.horizontalGradient( listOf(Color.Transparent, colorShade) ) )
+                        .onPointerEvent(PointerEventType.Press) {
+                            val position = it.changes.first().position
+                            alphaPosX = position.x
+                            resultColor = colorShade.copy(alpha = getAlpha(position, correctShadeBoxSize))
+                        }
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, _ ->
+                                alphaPosX = (change.position.x).coerceIn(0f..correctShadeBoxSize.toFloat())
+                                resultColor = colorShade.copy(alpha = getAlpha(change.position, correctShadeBoxSize))
+                            }
+                        }
+
+                )
+
+            }
 
         }
 
     }
-
-
-
 
 
 }

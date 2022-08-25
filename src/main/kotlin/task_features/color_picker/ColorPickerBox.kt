@@ -1,9 +1,12 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,6 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import task_features.color_picker.ColorPalette
+import task_features.color_picker.ColorPicker
+import task_features.color_picker.UserColorPalette
 
 
 @Composable
@@ -21,6 +27,7 @@ fun ColorPickerBox(
     trigger: () -> Unit
 ) {
 
+/** Color manipulation variables */
     var bgColor by remember { mutableStateOf(Color(item.bg[0], item.bg[1], item.bg[2], item.bg[3])) }
     var borderColor by remember { mutableStateOf(Color(item.border[0], item.border[1], item.border[2], item.border[3])) }
     var textColor by remember { mutableStateOf(Color(item.text[0], item.text[1], item.text[2], item.text[3])) }
@@ -33,15 +40,74 @@ fun ColorPickerBox(
     var borderColorUpdated by remember { mutableStateOf(borderColor) }
     var textColorUpdated by remember { mutableStateOf(textColor) }
 
+/** User palette variables */
+    val paletteList = remember { JsonFileOperations.loadColorPalette() }
+    val scroll = rememberScrollState()
+
 
     Box(Modifier.fillMaxSize().padding(15.dp, 15.dp)) {
 
         Column(verticalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier.fillMaxSize()) {
 
-            when {
-                bg && !border && !text -> ColorPicker(bgColor, Color.White) { bgColorUpdated = it }
-                !bg && border && !text -> ColorPicker(borderColor, Color.White) { borderColorUpdated = it }
-                !bg && !border && text -> ColorPicker(textColor, Color.White) { textColorUpdated = it }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+
+                when {
+                    bg && !border && !text -> ColorPicker(bgColor, Color.White) { bgColorUpdated = it }
+                    !bg && border && !text -> ColorPicker(borderColor, Color.White) { borderColorUpdated = it }
+                    !bg && !border && text -> ColorPicker(textColor, Color.White) { textColorUpdated = it }
+                }
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
+                    modifier = Modifier.height(255.dp).verticalScroll(scroll)
+                ) {
+                    paletteList.forEachIndexed { _index, _item ->
+
+                        UserColorPalette(
+                            preset = _item,
+                            bg = bgColorUpdated,
+                            border = borderColorUpdated,
+                            text = textColorUpdated,
+                            bgLamb = { bgColor = it; bgColorUpdated = it },
+                            borderLamb = { borderColor = it; borderColorUpdated = it },
+                            textLamb = { textColor = it; textColorUpdated = it },
+                            delete = { paletteList.removeAt(_index) },
+                            applyColors = { _bg, _border, _text ->
+                                bgColor = _bg
+                                borderColor = _border
+                                textColor = _text
+                                bgColorUpdated = _bg
+                                borderColorUpdated = _border
+                                textColorUpdated = _text
+                            },
+                            saveChanges = { _bg, _border, _text ->
+                                paletteList.set(
+                                    index = _index,
+                                    element = ColorPalette(
+                                        color1 = listOf(_bg.red, _bg.green, _bg.blue, _bg.alpha),
+                                        color2 = listOf(_border.red, _border.green, _border.blue, _border.alpha),
+                                        color3 = listOf(_text.red, _text.green, _text.blue, _text.alpha)
+                                    )
+                                )
+                            }
+                        )
+                    }
+
+                    Icon(
+                        imageVector = Icons.Rounded.AddCircle,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp).clickable(
+                            interactionSource = MutableInteractionSource(),
+                            indication = rememberRipple(bounded = false, color = Color.White)
+                        ) { paletteList.add(ColorPalette()) }
+                    )
+
+                }
+
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -147,6 +213,7 @@ fun ColorPickerBox(
                             item.text = listOf(textColorUpdated.red, textColorUpdated.green, textColorUpdated.blue, textColorUpdated.alpha)
                             save.invoke()
                             trigger.invoke()
+                            JsonFileOperations.createColorPalette(paletteList.toList())
                             cancel.invoke()
                         }
                         .padding(10.dp, 4.dp)
@@ -159,7 +226,10 @@ fun ColorPickerBox(
                     Modifier
                         .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp))
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable { cancel.invoke() }
+                        .clickable {
+                            JsonFileOperations.createColorPalette(paletteList.toList())
+                            cancel.invoke()
+                        }
                         .padding(10.dp, 4.dp)
                 ) {
                     Text("Cancel", color = Color.LightGray, modifier = Modifier.align(Alignment.Center))

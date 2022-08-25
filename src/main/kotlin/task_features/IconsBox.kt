@@ -63,7 +63,7 @@ fun IconsBox(
 /** Color picker dialog */
     if (openDialog) {
 
-        val dialogState = rememberDialogState(size = DpSize(450.dp, 500.dp))
+        val dialogState = rememberDialogState(size = DpSize(500.dp, 500.dp))
 
         Dialog(
             onCloseRequest = { openDialog = false },
@@ -73,7 +73,13 @@ fun IconsBox(
             transparent = true,
             resizable = false
         ) {
-            Column(Modifier.clip(RoundedCornerShape(10.dp)).fillMaxSize().background(Colors.bg)) {
+            Column(
+                Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .fillMaxSize()
+                    .background(Colors.bg)
+                    .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            ) {
                 WindowDraggableArea {
                     Box(Modifier.fillMaxWidth().height(40.dp)) {
                         Text("Color picker", Modifier.align(Alignment.Center), Color.White )

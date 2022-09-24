@@ -7,6 +7,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 
 
@@ -14,7 +15,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainScreenTF(text: String, textChange: (String) -> Unit, add: () -> Unit) {
 
-    var tfState by remember { mutableStateOf(text) }
+    var tfState by remember(text) { mutableStateOf(text) }
+    val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = tfState,
@@ -40,6 +42,7 @@ fun MainScreenTF(text: String, textChange: (String) -> Unit, add: () -> Unit) {
             } else if ((it.key == Key.Escape) && (it.type == KeyEventType.KeyUp)) {
                 tfState = ""
                 textChange("")
+                focusManager.clearFocus()
                 true
             } else {false}
         }

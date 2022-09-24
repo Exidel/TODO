@@ -1,5 +1,6 @@
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.io.File
@@ -10,7 +11,7 @@ object FileOperations {
         val settings: String =
             "${state.size.width.value.toInt()}" + "\n" + "${state.size.height.value.toInt()}" + "\n" +
                     "${state.position.x.value.toInt()}" + "\n" + "${state.position.y.value.toInt()}"
-        File("settings.txt").writeText(settings)
+        if (state.placement == WindowPlacement.Floating) File("settings.txt").writeText(settings)
     }
 
 
